@@ -120,7 +120,7 @@ export function MobileNav({ isOpen, onClose }: MobileNavProps) {
                         <div className="sticky top-0 z-10 flex items-center justify-between p-4 bg-slate-900/95 backdrop-blur-sm border-b border-white/10">
                             <div className="flex items-center">
                                 <Image src="/Logos/ART_SPACES_DESIGN_LOGO.png" alt="Logo" width={40} height={40} className="h-12 w-10 md:h-16 md:w-14 object-contain" />
-                                <Image src="/Logos/ART_SPACES_DESIGN_LIGHT.png" alt="Logo" width={150} height={50} className="h-16 w-48 md:h-20 md:w-64 object-contain" />
+                                <Image src="/Logos/ART_SPACES_DESIGN_DARK.png" alt="Logo" width={150} height={50} className="h-16 w-48 md:h-20 md:w-64 object-contain" />
                             </div>
                             <button
                                 onClick={onClose}

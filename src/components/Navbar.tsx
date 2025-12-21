@@ -82,7 +82,7 @@ export function Navbar() {
                     {/* ========== LEFT : Brand ========== */}
                     <Link
                         href="/"
-                        className="relative z-10 flex items-center pl-4 pr-6 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition"
+                        className="relative z-10 flex items-center pl-2 pr-4 md:pl-4 md:pr-6 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition"
                     >
                         <Image
                             src="/Logos/ART_SPACES_DESIGN_LOGO.png"
@@ -90,13 +90,14 @@ export function Navbar() {
                             width={40}
                             height={40}
                             priority
+                            className="w-[32px] md:w-[40px]"
                         />
                         <Image
                             src="/Logos/ART_SPACES_DESIGN_LIGHT.png"
                             alt="Art Spaces Design"
                             width={250}
                             height={60}
-                            className="opacity-90"
+                            className="opacity-90 w-[240px] md:w-[250px]"
                         />
                     </Link>
 
@@ -132,14 +133,14 @@ export function Navbar() {
                         text-xs font-semibold uppercase tracking-wider
                         transition-colors
                         ${active
-                                            ? " bg-[var(--brand-green)] text-[var(--brand-yellow)]"
-                                            : "text-[var(--brand-green)] hover:text-foreground"}
+                                            ? "text-[var(--brand-yellow)] bg-[var(--brand-green)] cursor-pointer"
+                                            : "text-[var(--brand-green)]"}
                     `}
                                 >
                                     {active && (
                                         <motion.span
                                             layoutId="nav-pill"
-                                            className="absolute inset-0 rounded-full bg-white dark:bg-[var(--brand-green)] shadow-sm"
+                                            className="absolute inset-0 rounded-full bg-[var(--brand-green)] shadow-sm"
                                             transition={{
                                                 type: "spring",
                                                 stiffness: 260,
