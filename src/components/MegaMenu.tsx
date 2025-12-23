@@ -57,7 +57,7 @@ export function MegaMenu({ isOpen, title, items, featured }: MegaMenuProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="w-full overflow-hidden shadow-2xl rounded-b-3xl border-t border-white/10 bg-slate-300"
+            className="w-full overflow-hidden shadow-2xl rounded-b-3xl border-t border-white/10 bg-slate-200"
             style={{
                 color: "var(--foreground)",
             }}

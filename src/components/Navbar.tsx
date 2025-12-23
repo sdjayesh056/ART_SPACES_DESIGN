@@ -67,7 +67,7 @@ export function Navbar() {
                 <div
                     className={`
                 pointer-events-auto relative flex items-center justify-between
-                w-full max-w-6xl
+                w-full max-w-7xl
                 rounded-full p-1.5
                 border border-white/10 dark:border-white/5
                 bg-slate-200

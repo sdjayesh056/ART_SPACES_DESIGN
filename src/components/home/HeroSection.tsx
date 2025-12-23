@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Play } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export function HeroSection() {
     return (
@@ -36,7 +37,7 @@ export function HeroSection() {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.1 }}
-                        className="text-4xl sm:text-5xl xl:text-6xl font-bold leading-tight text-slate-900"
+                        className="text-4xl md:text-5xl font-extrabold leading-tight text-slate-900"
                     >
                         Design Spaces That <br />
                         <span className="bg-gradient-to-r from-emerald-800 via-green-500 to-yellow-500 bg-clip-text text-transparent">
@@ -118,26 +119,7 @@ export function HeroSection() {
                 >
                     {/* Glass Frame */}
                     <div className="relative w-full max-w-lg aspect-square rounded-3xl bg-white/40 backdrop-blur-2xl border border-white/40 shadow-2xl overflow-hidden">
-                        {/* Floating elements */}
-                        <motion.div
-                            animate={{ y: [0, -18, 0] }}
-                            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                            className="absolute top-10 left-10 w-20 h-20 rounded-xl bg-gradient-to-br from-emerald-700 to-green-400 shadow-xl"
-                        />
-
-                        <motion.div
-                            animate={{ y: [0, 22, 0] }}
-                            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-                            className="absolute bottom-16 right-14 w-28 h-28 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 shadow-xl"
-                        />
-
-                        {/* Placeholder for 3D Illustration */}
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-slate-700 font-semibold text-center px-8">
-                                🚀 Replace this with Spline / Lottie / Three.js 3D
-                                futuristic interior illustration
-                            </span>
-                        </div>
+                        <Image src="/Logos/Home_Right_Visuals.png" alt="home-right-visuals" width={512} height={612} className="h-128" />
                     </div>
                 </motion.div>
             </div>
