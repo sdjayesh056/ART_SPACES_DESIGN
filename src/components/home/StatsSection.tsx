@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
-import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { Award, Users, Building2, Globe2, Trophy, Zap } from "lucide-react";
+import React, { useRef, useEffect, useState } from "react";
+import { motion, useInView, useMotionValue, useTransform } from "framer-motion";
+import { Building2, Users, Trophy, Globe2, Sparkles } from "lucide-react";
 
 const stats = [
     {
@@ -10,30 +10,33 @@ const stats = [
         icon: Building2,
         value: 500,
         suffix: "+",
-        label: "Projects Delivered",
-        description: "Transforming visions into reality",
-        color: "#3b82f6", // Blue
-        gradient: "from-blue-500 to-cyan-400"
+        label: "Projects Completed",
+        description: "Luxury residential, commercial, and hospitality interiors delivered across India.",
+        color: "#2563eb",
+        bgColor: "bg-blue-50",
+        glowColor: "rgba(37, 99, 235, 0.15)",
     },
     {
         id: 2,
         icon: Users,
-        value: 1200,
-        suffix: "+",
-        label: "Happy Clients",
-        description: "Building lasting relationships globally",
-        color: "#8b5cf6", // Violet
-        gradient: "from-violet-500 to-fuchsia-400"
+        value: 98,
+        suffix: "%",
+        label: "Client Satisfaction",
+        description: "Consistently rated 5-stars for premium interior design consultation services.",
+        color: "#7c3aed",
+        bgColor: "bg-violet-50",
+        glowColor: "rgba(124, 58, 237, 0.15)",
     },
     {
         id: 3,
         icon: Trophy,
         value: 45,
         suffix: "+",
-        label: "Industry Awards",
-        description: "Recognized design excellence",
-        color: "#f59e0b", // Amber
-        gradient: "from-amber-500 to-orange-400"
+        label: "Design Awards",
+        description: "Recognized by leading architecture and interior design associations worldwide.",
+        color: "#ea580c",
+        bgColor: "bg-orange-50",
+        glowColor: "rgba(234, 88, 12, 0.15)",
     },
     {
         id: 4,
@@ -41,162 +44,208 @@ const stats = [
         value: 12,
         suffix: "",
         label: "Countries Served",
-        description: "International design footprint",
-        color: "#10b981", // Emerald
-        gradient: "from-emerald-500 to-teal-400"
+        description: "Expanding our signature aesthetic to international residential and commercial projects.",
+        color: "#0d9488",
+        bgColor: "bg-teal-50",
+        glowColor: "rgba(13, 148, 136, 0.15)",
     },
 ];
 
-function AnimatedCounter({ value, suffix = "", inView }: { value: number; suffix?: string; inView: boolean }) {
+// Animated Counter
+const AnimatedCounter = ({ value, suffix, inView, color }: { value: number; suffix: string; inView: boolean; color: string }) => {
     const [count, setCount] = useState(0);
-    const hasAnimated = useRef(false);
 
     useEffect(() => {
-        if (inView && !hasAnimated.current) {
-            hasAnimated.current = true;
-            let start = 0;
-            const end = value;
-            const duration = 2000;
-            const incrementTime = duration / end > 20 ? duration / end : 20; // limit tick speed
+        if (!inView) return;
 
-            const timer = setInterval(() => {
-                start += Math.ceil(end / (duration / incrementTime));
-                if (start >= end) {
-                    setCount(end);
-                    clearInterval(timer);
-                } else {
-                    setCount(start);
-                }
-            }, incrementTime);
+        let start = 0;
+        const duration = 2000;
+        const startTime = performance.now();
 
-            return () => clearInterval(timer);
-        }
+        const animate = (currentTime: number) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            setCount(Math.floor(value * eased));
+            if (progress < 1) requestAnimationFrame(animate);
+        };
+
+        requestAnimationFrame(animate);
     }, [inView, value]);
 
     return (
-        <span className="tabular-nums font-bold text-4xl tracking-tight text-slate-800">
+        <span className="tabular-nums">
             {count}
-            <span className="text-3xl md:text-4xl text-slate-400 ml-1 font-bold">{suffix}</span>
+            <span style={{ color }} className="opacity-70">{suffix}</span>
         </span>
     );
-}
+};
 
-const StatCard = ({ stat, index, inView }: { stat: any; index: number; inView: boolean }) => {
-    // 3D Tilt Logic
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
-    const rotateX = useTransform(y, [-0.5, 0.5], ["5deg", "-5deg"]);
-    const rotateY = useTransform(x, [-0.5, 0.5], ["-5deg", "5deg"]);
+// Futuristic Card - Light Theme
+const FuturisticCard = ({ stat, index, inView }: { stat: typeof stats[0]; index: number; inView: boolean }) => {
+    const cardRef = useRef<HTMLDivElement>(null);
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const width = rect.width;
-        const height = rect.height;
-        const mouseX = e.clientX - rect.left - width / 2;
-        const mouseY = e.clientY - rect.top - height / 2;
-        x.set(mouseX / width);
-        y.set(mouseY / height);
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (!cardRef.current) return;
+        const rect = cardRef.current.getBoundingClientRect();
+        mouseX.set(e.clientX - rect.left);
+        mouseY.set(e.clientY - rect.top);
     };
 
-    const handleMouseLeave = () => {
-        x.set(0);
-        y.set(0);
-    };
+    const spotlightX = useTransform(mouseX, (val) => `${val}px`);
+    const spotlightY = useTransform(mouseY, (val) => `${val}px`);
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 50 }}
+        <motion.article
+            initial={{ opacity: 0, y: 40 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: index * 0.1, type: "spring" }}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            style={{
-                rotateX,
-                rotateY,
-                transformStyle: "preserve-3d",
-                perspective: 1000
-            }}
-            className="group relative bg-white/80 backdrop-blur-xl rounded-[2rem] p-8 border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300"
+            transition={{ delay: 0.15 * index, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="group relative"
         >
-            {/* Background Gradient Blob */}
             <div
-                className={`absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-500 bg-gradient-to-br ${stat.gradient} rounded-[2rem]`}
-            />
-
-            <div className="relative z-10 flex flex-col items-center text-center" style={{ transform: "translateZ(20px)" }}>
-                {/* Icon Circle */}
-                <div
-                    className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-lg transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 bg-gradient-to-br ${stat.gradient}`}
-                >
-                    <stat.icon className="w-8 h-8 text-white" />
-                </div>
-
-                {/* Counter */}
-                <div className="mb-2">
-                    <AnimatedCounter value={stat.value} suffix={stat.suffix} inView={inView} />
-                </div>
-
-                {/* Label */}
-                <h3 className="text-lg font-bold text-slate-700 mb-2 uppercase tracking-wide">
-                    {stat.label}
-                </h3>
-
-                {/* Description */}
-                <p className="text-slate-500 text-sm font-medium leading-relaxed">
-                    {stat.description}
-                </p>
-
-                {/* Bottom decorative bar */}
-                <div
-                    className={`h-1.5 w-12 rounded-full mt-6 bg-gradient-to-r ${stat.gradient} opacity-30 group-hover:opacity-100 group-hover:w-24 transition-all duration-500`}
+                ref={cardRef}
+                onMouseMove={handleMouseMove}
+                className="relative h-full p-8 rounded-3xl bg-white border border-slate-200 overflow-hidden transition-all duration-500 hover:border-slate-300 hover:shadow-2xl hover:-translate-y-1"
+            >
+                {/* Animated Spotlight on Hover */}
+                <motion.div
+                    className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{
+                        background: `radial-gradient(400px circle at ${spotlightX.get()} ${spotlightY.get()}, ${stat.glowColor}, transparent 60%)`,
+                    }}
                 />
+
+                {/* Subtle Grid Pattern */}
+                <div className="absolute inset-0 opacity-[0.02]" style={{
+                    backgroundImage: `linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px)`,
+                    backgroundSize: '20px 20px'
+                }} />
+
+                {/* Top Corner Decoration */}
+                <div className="absolute top-4 right-4 flex items-center gap-1.5 opacity-30 group-hover:opacity-100 transition-opacity">
+                    <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                    <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: stat.color }} />
+                </div>
+
+                {/* Content */}
+                <div className="relative z-10">
+                    {/* Icon with Glow Ring */}
+                    <div className="relative mb-8 inline-block">
+                        <div
+                            className="w-16 h-16 rounded-2xl flex items-center justify-center border transition-all duration-300 group-hover:scale-110"
+                            style={{
+                                backgroundColor: `${stat.color}10`,
+                                borderColor: `${stat.color}25`,
+                            }}
+                        >
+                            <stat.icon size={28} style={{ color: stat.color }} />
+                        </div>
+                        {/* Orbiting Ring */}
+                        <div
+                            className="absolute -inset-3 border border-dashed rounded-full opacity-0 group-hover:opacity-40 transition-opacity animate-[spin_12s_linear_infinite]"
+                            style={{ borderColor: stat.color }}
+                        />
+                    </div>
+
+                    {/* Value */}
+                    <div className="text-5xl md:text-6xl font-bold text-slate-900 mb-4 leading-none tracking-tight">
+                        <AnimatedCounter value={stat.value} suffix={stat.suffix} inView={inView} color={stat.color} />
+                    </div>
+
+                    {/* Label */}
+                    <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                        {stat.label}
+                    </h3>
+
+                    {/* Description */}
+                    <p className="text-slate-500 text-sm leading-relaxed">
+                        {stat.description}
+                    </p>
+
+                    {/* Bottom Accent Line */}
+                    <div
+                        className="absolute bottom-0 left-0 h-1 w-0 group-hover:w-full transition-all duration-700 rounded-full"
+                        style={{ backgroundColor: stat.color }}
+                    />
+                </div>
             </div>
-        </motion.div>
+        </motion.article>
     );
 };
 
 export function StatsSection() {
-    const ref = useRef(null);
-    const inView = useInView(ref, { once: true, margin: "-100px" });
+    const sectionRef = useRef(null);
+    const inView = useInView(sectionRef, { once: true, margin: "-100px" });
 
     return (
         <section
-            ref={ref}
-            className="py-24 relative overflow-hidden bg-slate-50"
+            ref={sectionRef}
+            className="py-24 md:py-32 bg-slate-50 relative overflow-hidden"
+            aria-label="Our Achievements and Industry Recognition"
         >
-            {/* Background Elements */}
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <div className="absolute top-1/4 -left-20 w-96 h-96 bg-blue-200/20 rounded-full blur-3xl" />
-                <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-violet-200/20 rounded-full blur-3xl" />
+            {/* Futuristic Background Elements */}
+            <div className="absolute inset-0 pointer-events-none">
+                {/* Gradient Orbs */}
+                <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-blue-100/50 rounded-full blur-[120px]" />
+                <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-violet-100/50 rounded-full blur-[100px]" />
             </div>
 
-            <div className="container mx-auto px-4 sm:px-6 lg:px-38 relative z-10">
-                {/* Section Header */}
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={inView ? { opacity: 1, scale: 1 } : {}}
-                    className="text-center mb-16 max-w-3xl mx-auto"
-                >
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200 shadow-sm mb-4">
-                        <Zap size={14} className="text-amber-500" fill="currentColor" />
-                        <span className="text-xs font-bold text-slate-600 tracking-wider uppercase">Proven Excellence</span>
-                    </div>
-                    <h2 className="text-3xl md:text-5xl font-bold text-slate-900 mb-6">
-                        Milestones That Define <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-800 via-green-500 to-yellow-500">Our Legacy</span>
-                    </h2>
-                    <p className="text-lg text-slate-600 leading-relaxed">
-                        With years of dedication and a passion for perfection, we have set new benchmarks in the design industry.
-                        Our numbers speak for the trust and satisfaction we deliver.
-                    </p>
-                </motion.div>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+                {/* Header */}
+                <div className="text-center mb-16 md:mb-20">
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={inView ? { opacity: 1, y: 0 } : {}}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-sm mb-6"
+                    >
+                        <Sparkles size={14} className="text-amber-500" />
+                        <span className="text-xs font-semibold uppercase tracking-wider text-slate-600">
+                            Why Choose Art Spaces
+                        </span>
+                    </motion.div>
+
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={inView ? { opacity: 1, y: 0 } : {}}
+                        transition={{ delay: 0.1 }}
+                        className="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900 tracking-tight mb-6"
+                    >
+                        Delivering <span className="text-emerald-600">Results</span> That Inspire
+                    </motion.h2>
+
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={inView ? { opacity: 1, y: 0 } : {}}
+                        transition={{ delay: 0.2 }}
+                        className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed"
+                    >
+                        As a leading interior design firm in India, we transform spaces into timeless experiences.
+                        Our commitment to innovation and craftsmanship defines every project.
+                    </motion.p>
+                </div>
 
                 {/* Stats Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {stats.map((stat, index) => (
-                        <StatCard key={stat.id} stat={stat} index={index} inView={inView} />
+                        <FuturisticCard key={stat.id} stat={stat} index={index} inView={inView} />
                     ))}
                 </div>
+
+                {/* Bottom Trust Text */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={inView ? { opacity: 1 } : {}}
+                    transition={{ delay: 0.8 }}
+                    className="text-center mt-16 md:mt-20"
+                >
+                    <p className="text-slate-500 text-sm">
+                        Trusted by homeowners, architects, and real estate developers across Mumbai, Delhi, Bangalore, and beyond.
+                    </p>
+                </motion.div>
             </div>
         </section>
     );
