@@ -1,163 +1,100 @@
-"use client";
-
 import React from "react";
-import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
 
 import { LeadCaptureForm } from "@/components/forms/LeadCaptureForm";
+import { Container } from "@/components/ui/Container";
+import { Eyebrow } from "@/components/ui/Eyebrow";
+import { Reveal } from "@/components/ui/Reveal";
+import { slideIn } from "@/lib/motion";
 
+const TRUST_POINTS = [
+    "Expert Design Consultation",
+    "Personalized Space Planning",
+    "Sustainable & Smart Solutions",
+    "24/7 Dedicated Support",
+];
+
+/**
+ * Server Component. Only <LeadCaptureForm> crosses the client boundary.
+ *
+ * This section owns the canonical #lead-form anchor — every "free
+ * consultation" call to action on the page scrolls here.
+ *
+ * Previously it carried around forty inline `style` objects, two
+ * always-running blurred blobs, and a <style jsx> block whose `@keyframes
+ * pulse` escaped its scope and overrode the pulse Tailwind emits for
+ * `animate-pulse` across the whole page. All three are gone.
+ */
 export function CTASection() {
     return (
-        <section className="py-24 lg:py-32 relative overflow-hidden" id="lead-form">
-            {/* Background - Preserved */}
+        <section
+            id="lead-form"
+            aria-labelledby="cta-heading"
+            className="relative overflow-hidden bg-gradient-to-br from-brand-900 via-brand-800 to-brand-500 py-20 md:py-28"
+        >
+            {/* Dot pattern. */}
             <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 opacity-10"
                 style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background: 'linear-gradient(135deg, #14532d 0%, #166534 50%, #22c55e 100%)',
+                    backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
+                    backgroundSize: "40px 40px",
                 }}
             />
 
-            {/* Pattern Overlay */}
-            <div
-                style={{
-                    position: 'absolute',
-                    inset: 0,
-                    opacity: 0.1,
-                    backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
-                    backgroundSize: '40px 40px',
-                }}
-            />
+            <Container className="relative z-10">
+                <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+                    {/* Left: pitch */}
+                    <Reveal variants={slideIn("left")}>
+                        <Eyebrow tone="inverse" className="mb-8">
+                            <span
+                                className="h-2 w-2 rounded-full bg-accent-400 animate-dot-pulse"
+                                aria-hidden="true"
+                            />
+                            Free Design Consultation
+                        </Eyebrow>
 
-            {/* Floating Shapes */}
-            <motion.div
-                style={{
-                    position: 'absolute',
-                    top: 40,
-                    left: 40,
-                    width: 200,
-                    height: 200,
-                    borderRadius: '50%',
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    filter: 'blur(60px)',
-                }}
-                animate={{ y: [0, -30, 0], x: [0, 20, 0] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.div
-                style={{
-                    position: 'absolute',
-                    bottom: 40,
-                    right: 40,
-                    width: 300,
-                    height: 300,
-                    borderRadius: '50%',
-                    background: 'rgba(226, 157, 8, 0.2)',
-                    filter: 'blur(80px)',
-                }}
-                animate={{ y: [0, 30, 0], x: [0, -20, 0] }}
-                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            />
-
-            {/* Content Container */}
-            <div className="section-container relative z-10">
-                <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center max-w-7xl mx-auto px-4">
-
-                    {/* Left Column: Content */}
-                    <motion.div
-                        initial={{ opacity: 0, x: -50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8 }}
-                    >
-                        {/* Badge */}
-                        <div
-                            style={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '0.5rem',
-                                padding: '0.5rem 1rem',
-                                borderRadius: '9999px',
-                                background: 'rgba(255, 255, 255, 0.15)',
-                                backdropFilter: 'blur(10px)',
-                                color: 'rgba(255, 255, 255, 0.9)',
-                                fontSize: '0.875rem',
-                                fontWeight: 500,
-                                marginBottom: '2rem',
-                                border: '1px solid rgba(255, 255, 255, 0.2)'
-                            }}
+                        <h2
+                            id="cta-heading"
+                            className="text-section font-bold text-balance text-ink-inverse"
                         >
-                            <span style={{
-                                width: 8,
-                                height: 8,
-                                borderRadius: '50%',
-                                background: '#fbbf24',
-                                animation: 'pulse 2s infinite',
-                            }} />
-                            Limited Time Offer: Free Design Consultation
-                        </div>
-
-                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight">
-                            Ready to Create Your <br />
-                            <span className="text-amber-400">Dream Space?</span>
+                            Ready to Create Your{" "}
+                            <span className="text-accent-on-brand">Dream Space?</span>
                         </h2>
 
-                        <p className="text-lg text-slate-100 mb-10 leading-relaxed opacity-90 max-w-lg">
+                        <p className="mb-10 mt-6 max-w-lg text-lg leading-relaxed text-pretty text-ink-inverse/90">
                             Transform your vision into reality with our expert design team.
-                            Schedule your free consultation today and take the first step
-                            towards a space that inspires.
+                            Schedule your free consultation today and take the first step towards a
+                            space that inspires.
                         </p>
 
-                        {/* Trust Points */}
-                        <div className="space-y-4">
-                            {[
-                                "Expert Design Consultation",
-                                "Personalized Space Planning",
-                                "Sustainable & Smart Solutions",
-                                "24/7 Dedicated Support"
-                            ].map((item, index) => (
-                                <motion.div
-                                    key={index}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: 0.2 + index * 0.1 }}
-                                    className="flex items-center gap-3 text-white font-medium"
+                        <ul className="list-none space-y-4 p-0">
+                            {TRUST_POINTS.map((point) => (
+                                <li
+                                    key={point}
+                                    className="flex items-center gap-3 font-medium text-ink-inverse"
                                 >
-                                    <div className="bg-white/20 p-1 rounded-full">
-                                        <CheckCircle size={16} className="text-amber-400" />
-                                    </div>
-                                    {item}
-                                </motion.div>
+                                    <span className="rounded-full bg-white/20 p-1">
+                                        <CheckCircle
+                                            size={16}
+                                            className="text-accent-400"
+                                            aria-hidden="true"
+                                        />
+                                    </span>
+                                    {point}
+                                </li>
                             ))}
-                        </div>
-                    </motion.div>
+                        </ul>
+                    </Reveal>
 
-                    {/* Right Column: Form */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.2 }}
-                        className="relative"
-                    >
-                        <div className="absolute inset-0 bg-white/5 rounded-3xl blur-xl" />
-                        <div
-                            className="relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 md:p-10 shadow-2xl"
-                        >
+                    {/* Right: the form */}
+                    <Reveal variants={slideIn("right", 0.15)} className="relative">
+                        <div className="rounded-panel border border-white/20 bg-white/10 p-8 shadow-2xl backdrop-blur-xl md:p-10">
                             <LeadCaptureForm />
                         </div>
-                    </motion.div>
+                    </Reveal>
                 </div>
-            </div>
-
-            {/* Pulse Animation Keyframes */}
-            <style jsx>{`
-                @keyframes pulse {
-                    0%, 100% { opacity: 1; transform: scale(1); }
-                    50% { opacity: 0.5; transform: scale(1.2); }
-                }
-            `}</style>
+            </Container>
         </section>
     );
 }

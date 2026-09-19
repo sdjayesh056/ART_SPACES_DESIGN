@@ -165,7 +165,6 @@ export function Navbar() {
                             alt="ArtSpaces Design"
                             width={40}
                             height={40}
-                            priority
                             className="w-[32px] md:w-[40px]"
                         />
                         {/*

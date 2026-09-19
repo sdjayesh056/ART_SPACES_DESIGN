@@ -103,6 +103,25 @@
     --animate-dot-pulse: dot-pulse 2s ease-in-out infinite;
     --animate-orbit: orbit 12s linear infinite;
 
+    /*
+        The testimonial marquee is a CSS animation, not a framer-motion one.
+        It was previously driven by framer and "paused" via the inline style
+        `animationPlayState`, which governs @keyframes only and therefore did
+        nothing at all — leaving moving text no user could stop (WCAG 2.2.2,
+        Level A). As CSS it pauses for real, costs no main thread, and is
+        covered by the reduced-motion guard at the bottom of this file.
+    */
+    --animate-marquee: marquee 48s linear infinite;
+
+    @keyframes marquee {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(-50%);
+        }
+    }
+
     @keyframes scan {
         0% {
             transform: translateY(0);
