@@ -58,7 +58,6 @@ const AnimatedCounter = ({ value, suffix, inView, color }: { value: number; suff
     useEffect(() => {
         if (!inView) return;
 
-        let start = 0;
         const duration = 2000;
         const startTime = performance.now();
 

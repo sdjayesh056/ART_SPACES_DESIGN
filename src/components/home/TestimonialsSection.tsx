@@ -72,7 +72,7 @@ const testimonials = [
 const marqueeTestimonials = [...testimonials, ...testimonials];
 
 // 3D Tilt Card Component for Testimonials
-const TestimonialCard = ({ testimonial, index }: { testimonial: any; index: number }) => {
+const TestimonialCard = ({ testimonial }: { testimonial: (typeof testimonials)[number] }) => {
     const x = useMotionValue(0);
     const y = useMotionValue(0);
 
@@ -192,7 +192,7 @@ export function TestimonialsSection() {
                         Trusted by <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-800 via-green-500 to-yellow-500">Visionaries</span>
                     </h2>
                     <p className="text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
-                        Don't just take our word for it. Hear from the homeowners, CEOs, and developers who have experienced the ArtSpaces transformation.
+                        Don&apos;t just take our word for it. Hear from the homeowners, CEOs, and developers who have experienced the ArtSpaces transformation.
                     </p>
                 </motion.div>
 
@@ -225,7 +225,7 @@ export function TestimonialsSection() {
                         }}
                     >
                         {marqueeTestimonials.map((testimonial, index) => (
-                            <TestimonialCard key={`${testimonial.id}-${index}`} testimonial={testimonial} index={index} />
+                            <TestimonialCard key={`${testimonial.id}-${index}`} testimonial={testimonial} />
                         ))}
                     </motion.div>
                 </div>

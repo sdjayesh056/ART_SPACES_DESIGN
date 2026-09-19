@@ -2,7 +2,9 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle, Smartphone, Mail, User } from "lucide-react";
+import { CheckCircle } from "lucide-react";
+
+import { LeadCaptureForm } from "@/components/forms/LeadCaptureForm";
 
 export function CTASection() {
     return (
@@ -143,65 +145,7 @@ export function CTASection() {
                         <div
                             className="relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 md:p-10 shadow-2xl"
                         >
-                            <h3 className="text-2xl font-bold text-white mb-2">Get Your Free Quote</h3>
-                            <p className="text-slate-200 text-sm mb-8">Fill out the form below and we'll get back to you within 24 hours.</p>
-
-                            <form className="space-y-6">
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-slate-200 ml-1">Full Name</label>
-                                    <div className="relative">
-                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-                                            <User size={18} />
-                                        </div>
-                                        <input
-                                            type="text"
-                                            placeholder="John Doe"
-                                            className="w-full bg-slate-200 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-400/50 focus:bg-white transition-all font-medium"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-slate-200 ml-1">Email Address</label>
-                                    <div className="relative">
-                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-                                            <Mail size={18} />
-                                        </div>
-                                        <input
-                                            type="email"
-                                            placeholder="john@example.com"
-                                            className="w-full bg-slate-200 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-400/50 focus:bg-white transition-all font-medium"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-slate-200 ml-1">Phone Number</label>
-                                    <div className="relative">
-                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-                                            <Smartphone size={18} />
-                                        </div>
-                                        <input
-                                            type="tel"
-                                            placeholder="+1 (555) 000-0000"
-                                            className="w-full bg-slate-200 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-400/50 focus:bg-white transition-all font-medium"
-                                        />
-                                    </div>
-                                </div>
-
-                                <motion.button
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    className="w-full bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all mt-4"
-                                >
-                                    Get Started Now
-                                    <ArrowRight size={20} />
-                                </motion.button>
-
-                                <p className="text-xs text-center text-slate-300/60 mt-4">
-                                    By submitting, you agree to our privacy policy. Your data is secure.
-                                </p>
-                            </form>
+                            <LeadCaptureForm />
                         </div>
                     </motion.div>
                 </div>

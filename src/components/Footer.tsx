@@ -16,6 +16,8 @@ import {
     Sparkles,
 } from "lucide-react";
 
+import { NewsletterForm } from "@/components/forms/NewsletterForm";
+
 const footerLinks = {
     spaces: [
         { label: "Residential", href: "/spaces/residential" },
@@ -113,16 +115,7 @@ export function Footer() {
                         <h4 className="text-xl font-extrabold text-slate-900 mb-1 tracking-tight">Join Our Design Newsletter</h4>
                         <p className="text-slate-600 text-sm font-medium">Curated architectural trends delivered to your inbox.</p>
                     </div>
-                    <form className="flex w-full md:w-auto max-w-md bg-white rounded-full p-1.5 border border-slate-200 shadow-sm hover:shadow-md focus-within:border-[var(--brand-green)] focus-within:ring-1 focus-within:ring-[var(--brand-green)] transition-all duration-300">
-                        <input
-                            type="email"
-                            placeholder="Email address"
-                            className="flex-1 bg-transparent rounded-full md:px-5 text-slate-900 placeholder:text-slate-400 focus:outline-none text-sm font-medium"
-                        />
-                        <button type="submit" className="px-2 md:px-6 py-2.5 rounded-full bg-slate-900 text-white text-xs font-bold uppercase tracking-wider hover:bg-[var(--brand-green)] transition-all duration-300">
-                            Subscribe
-                        </button>
-                    </form>
+                    <NewsletterForm />
                 </motion.div>
 
                 {/* 2. MAIN "BLUEPRINT" GRID */}
