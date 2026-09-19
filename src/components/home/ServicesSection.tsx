@@ -82,10 +82,10 @@ function Card({ service, index }: { service: typeof services[0], index: number }
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="group relative h-full perspective-1000"
+            className="group relative h-full perspective-card"
         >
             {/* Main Card Container */}
-            <div className="relative h-full bg-white bg-opacity-80 backdrop-blur-md rounded-[2rem] border border-white/60 shadow-xl overflow-hidden transition-all duration-500 hover:shadow-2xl hover:bg-opacity-90 hover:scale-[1.02]">
+            <div className="relative h-full bg-white/80 backdrop-blur-md rounded-[2rem] border border-white/60 shadow-xl overflow-hidden transition-all duration-500 hover:shadow-2xl hover:bg-white/90 hover:scale-[1.02]">
 
                 {/* Animated Border Beam */}
                 <span className="absolute inset-0 rounded-[2rem] p-[1px] bg-gradient-to-r from-transparent via-slate-300 to-transparent opacity-50 group-hover:opacity-100 animate-border-spin pointer-events-none" />
@@ -130,7 +130,7 @@ function Card({ service, index }: { service: typeof services[0], index: number }
                     </div>
 
                     {/* Description with reveal effect */}
-                    <p className="text-slate-500 text-sm leading-relaxed mb-8 flex-grow opacity-80 group-hover:opacity-100 transition-opacity">
+                    <p className="text-slate-500 text-sm leading-relaxed mb-8 grow opacity-80 group-hover:opacity-100 transition-opacity">
                         {service.description}
                     </p>
 
@@ -221,13 +221,13 @@ export function ServicesSection() {
 
                     <h2 className="text-4xl font-bold text-slate-900 tracking-tight mb-8 relative inline-block">
                         <span className="relative z-10">NEXT GEN</span>
-                        <span className="mx-4 text-transparent bg-clip-text bg-gradient-to-r from-emerald-800 via-green-500 to-yellow-500 animate-gradient-x">DESIGN</span>
+                        <span className="mx-4 brand-gradient-text animate-gradient-pan">DESIGN</span>
                         {/* <br /> */}
                         <span className="text-3xl md:text-5xl font-light text-slate-400">ARCHITECTURES</span>
 
                         {/* Decorative floating elements around header */}
-                        <Aperture className="absolute -top-8 -right-14 w-12 h-12 text-[var(--brand-green)] animate-[spin_20s_linear_infinite]" />
-                        <Zap className="absolute -bottom-4 -left-16 w-8 h-8 text-[var(--brand-yellow)] animate-[spin_5s_linear_infinite] rotate-12" />
+                        <Aperture className="absolute -top-8 -right-14 w-12 h-12 text-brand-900 animate-[spin_20s_linear_infinite]" />
+                        <Zap className="absolute -bottom-4 -left-16 w-8 h-8 text-accent-on-brand animate-[spin_5s_linear_infinite] rotate-12" />
                     </h2>
 
                     <p className="max-w-2xl mx-auto text-slate-600 text-lg leading-relaxed">
@@ -252,10 +252,10 @@ export function ServicesSection() {
                 >
                     <Link href="#lead-form" className="group">
                         <div className="relative px-1 py-1 rounded-full bg-slate-200 overflow-hidden">
-                            <div className="absolute inset-0 bg-[var(--brand-green)] animate-[spin_4s_linear_infinite] group-hover:opacity-60 transition-opacity" />
+                            <div className="absolute inset-0 bg-brand-900 animate-[spin_4s_linear_infinite] group-hover:opacity-60 transition-opacity" />
                             <div className="relative bg-white rounded-full px-8 py-4 flex items-center gap-3 transition-transform group-hover:scale-[0.98]">
-                                <span className="font-bold text-[var(--brand-green)]">Start Your Transformation</span>
-                                <div className="w-8 h-8 rounded-full bg-[var(--brand-green)] flex items-center justify-center text-[var(--brand-yellow)] group-hover:bg-black transition-colors">
+                                <span className="font-bold text-brand-900">Start Your Transformation</span>
+                                <div className="w-8 h-8 rounded-full bg-brand-900 flex items-center justify-center text-accent-on-brand group-hover:bg-black transition-colors">
                                     <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
                                 </div>
                             </div>

@@ -106,7 +106,7 @@ function HolographicCard({ project }: { project: typeof projects[0] }) {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="group relative h-[450px] w-full perspective-1000"
+            className="group relative h-[450px] w-full perspective-card"
         >
             <div className="relative h-full w-full bg-slate-900/5 backdrop-blur-sm border border-white/40 rounded-3xl overflow-hidden transition-all duration-500 group-hover:shadow-[0_0_40px_-10px_rgba(0,0,0,0.3)] group-hover:border-white/80">
 
@@ -165,7 +165,7 @@ function HolographicCard({ project }: { project: typeof projects[0] }) {
 
                         {/* Interactive Action */}
                         <div className="flex items-center gap-3 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                            <button className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-white hover:text-[var(--brand-yellow)] transition-colors">
+                            <button className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-white hover:text-accent-on-brand transition-colors">
                                 [ INITIALIZE_VIEW ] <ArrowRight size={14} />
                             </button>
                         </div>
@@ -232,7 +232,7 @@ export function PortfolioSection() {
                     </div>
 
                     <h2 className="text-4xl font-bold text-slate-900 tracking-tighter mb-6">
-                        DESIGN <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-800 via-green-500 to-yellow-500">INNOVATION</span>
+                        DESIGN <span className="brand-gradient-text">INNOVATION</span>
                     </h2>
                     <p className="max-w-xl mx-auto text-slate-500 text-lg font-medium">
                         Selected works demonstrating the convergence of art, technology, and sustainable engineering.

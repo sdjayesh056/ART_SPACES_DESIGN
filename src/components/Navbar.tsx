@@ -196,7 +196,7 @@ export function Navbar() {
                                         href={item.href}
                                         onMouseEnter={closeMenuNow}
                                         onFocus={closeMenuNow}
-                                        className="relative z-10 px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-[var(--brand-green)] hover:bg-[var(--brand-green)] hover:text-[var(--brand-yellow)] transition-colors"
+                                        className="relative z-10 px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-brand-900 hover:bg-brand-900 hover:text-accent-on-brand transition-colors"
                                     >
                                         {item.label}
                                     </Link>
@@ -223,13 +223,13 @@ export function Navbar() {
                         relative z-10 px-5 py-2 rounded-full cursor-pointer
                         text-xs font-semibold uppercase tracking-wider
                         transition-colors
-                        ${isActive ? "text-[var(--brand-yellow)]" : "text-[var(--brand-green)]"}
+                        ${isActive ? "text-accent-on-brand" : "text-brand-900"}
                     `}
                                 >
                                     {isActive && (
                                         <motion.span
                                             layoutId="nav-pill"
-                                            className="absolute inset-0 rounded-full bg-[var(--brand-green)] shadow-sm"
+                                            className="absolute inset-0 rounded-full bg-brand-900 shadow-sm"
                                             transition={{ type: "spring", stiffness: 260, damping: 22 }}
                                         />
                                     )}
@@ -246,8 +246,8 @@ export function Navbar() {
                             className="
                     hidden md:flex items-center gap-2
                     rounded-full px-5 py-2.5
-                    bg-[var(--brand-green)]
-                    text-[var(--brand-yellow)] text-xs font-bold uppercase tracking-wider
+                    bg-brand-900
+                    text-accent-on-brand text-xs font-bold uppercase tracking-wider
                     shadow-lg hover:shadow-xl
                     hover:scale-[1.03] active:scale-[0.97]
                     transition

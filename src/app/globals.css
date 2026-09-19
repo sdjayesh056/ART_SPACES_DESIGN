@@ -1,365 +1,311 @@
 @import "tailwindcss";
 
-/* Tailwind v4 Theme Configuration */
+/* ═══════════════════════════════════════════════════════════════════════
+   DESIGN TOKENS — the single source of truth.
+
+   This project has no tailwind.config file and will not get one: Tailwind v4
+   is configured entirely through this @theme block. Anything declared here
+   becomes a utility (--color-brand-900 -> bg-brand-900, text-brand-900/60).
+
+   A class that is neither a v4 default nor declared here emits ZERO CSS and
+   fails silently — that has already shipped four times in this repo
+   (animate-border-spin, animate-scan, animate-gradient-x, perspective-1000).
+   Add the token here before using the utility.
+   ═══════════════════════════════════════════════════════════════════════ */
+
 @theme {
-  /* Brand Colors */
-  --color-brand-green: #14532d;
-  --color-brand-green-light: #22c55e;
-  --color-brand-yellow: #e29d08;
-  --color-brand-yellow-light: #fbbf24;
-  --color-brand-red: #991b1b;
+    /* ── Brand: deep forest green. 900 is THE brand colour. ─────────────── */
+    --color-brand-50: #f0fdf4;
+    --color-brand-100: #dcfce7;
+    --color-brand-200: #bbf7d0;
+    --color-brand-300: #86efac;
+    --color-brand-400: #4ade80;
+    --color-brand-500: #22c55e;
+    --color-brand-600: #16a34a;
+    --color-brand-700: #15803d;
+    --color-brand-800: #166534;
+    --color-brand-900: #14532d;
+    --color-brand-950: #0b2e19;
 
-  /* Backgrounds */
-  --color-bg-primary: #ffffff;
-  --color-bg-secondary: #f8fafc;
-  --color-bg-tertiary: #f1f5f9;
+    /* ── Accent: gold. 500 is THE brand gold. ───────────────────────────── */
+    --color-accent-100: #fef3c7;
+    --color-accent-300: #fcd34d;
+    --color-accent-400: #fbbf24;
+    --color-accent-500: #e29d08;
+    --color-accent-600: #b8800a;
 
-  /* Text Colors */
-  --color-text-primary: #0f172a;
-  --color-text-secondary: #334155;
-  --color-text-muted: #64748b;
-  --color-text-light: #94a3b8;
+    /*
+        Gold for TEXT sitting on brand-900. The brand gold itself measures
+        3.93:1 there and fails WCAG AA for normal-size text; this measures
+        5.46:1. Reserve accent-500 for large display type, icons and non-text
+        UI, which only need 3:1.
+    */
+    --color-accent-on-brand: #fbbf24;
+
+    /* ── Semantic surfaces and ink, named by role rather than by colour ─── */
+    --color-surface: #ffffff;
+    --color-surface-muted: #f8fafc;
+    --color-surface-sunken: #f1f5f9;
+    --color-surface-inverse: #0f172a;
+
+    --color-line: #e2e8f0;
+    --color-line-strong: #cbd5e1;
+
+    --color-ink: #0f172a;
+    --color-ink-muted: #475569;
+    --color-ink-subtle: #64748b;
+    --color-ink-inverse: #ffffff;
+
+    /*
+        Required for the /opacity modifiers (text-foreground/40) to compile at
+        all. Without these the slash variants silently produced nothing.
+    */
+    --color-background: #ffffff;
+    --color-foreground: #0f172a;
+
+    /* ── Typography ─────────────────────────────────────────────────────── */
+    --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+    --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+    --text-eyebrow: 0.6875rem;
+    --text-eyebrow--letter-spacing: 0.18em;
+    --text-eyebrow--font-weight: 700;
+
+    --text-section: clamp(2rem, 1.35rem + 2.4vw, 3rem);
+    --text-section--line-height: 1.1;
+    --text-section--letter-spacing: -0.02em;
+
+    --text-display: clamp(2.25rem, 1.5rem + 3.2vw, 3.75rem);
+    --text-display--line-height: 1.05;
+    --text-display--letter-spacing: -0.03em;
+
+    /* ── Radius: three steps, replacing the twelve spellings in use ─────── */
+    --radius-tile: 0.75rem;
+    --radius-card: 1.5rem;
+    --radius-panel: 2rem;
+
+    /* ── Elevation ──────────────────────────────────────────────────────── */
+    --shadow-card: 0 4px 20px rgba(15, 23, 42, 0.06);
+    --shadow-card-hover: 0 20px 40px rgba(20, 83, 45, 0.12);
+    --shadow-pill: 0 20px 60px -20px rgba(15, 23, 42, 0.1);
+
+    /* ── 3D ─────────────────────────────────────────────────────────────── */
+    --perspective-card: 1000px;
+
+    /* ── Motion ─────────────────────────────────────────────────────────── */
+    --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+    --animate-scan: scan 2.2s linear infinite;
+    --animate-border-spin: border-spin 4s linear infinite;
+    --animate-float: float 6s ease-in-out infinite;
+    --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
+    --animate-dot-pulse: dot-pulse 2s ease-in-out infinite;
+    --animate-orbit: orbit 12s linear infinite;
+
+    @keyframes scan {
+        0% {
+            transform: translateY(0);
+            opacity: 0;
+        }
+        10%,
+        90% {
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(var(--scan-distance, 440px));
+            opacity: 0;
+        }
+    }
+
+    @keyframes border-spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes float {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-20px);
+        }
+    }
+
+    @keyframes pulse-glow {
+        0%,
+        100% {
+            box-shadow: 0 0 20px rgba(20, 83, 45, 0.2);
+        }
+        50% {
+            box-shadow: 0 0 40px rgba(20, 83, 45, 0.4);
+        }
+    }
+
+    @keyframes dot-pulse {
+        0%,
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.5;
+            transform: scale(1.2);
+        }
+    }
+
+    @keyframes orbit {
+        to {
+            transform: rotate(360deg);
+        }
+    }
 }
 
-:root {
-  /* CSS Variables for JS/inline use */
-  --brand-green: #14532d;
-  --brand-green-light: #22c55e;
-  --brand-yellow: #e29d08;
-  --brand-yellow-light: #fbbf24;
+/* ═══════════════════════════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════════════════════════ */
 
-  /* Gradients */
-  --accent-gradient: linear-gradient(135deg, #14532d 0%, #22c55e 50%, #e29d08 100%);
-  --hero-gradient: linear-gradient(135deg, #14532d 0%, #22c55e 100%);
-
-  /* Shadows */
-  --shadow-glow: 0 0 40px rgba(20, 83, 45, 0.3);
-  --shadow-glow-yellow: 0 0 40px rgba(226, 157, 8, 0.3);
-
-  /* Glass */
-  --glass-bg: rgba(255, 255, 255, 0.85);
-  --glass-border: rgba(255, 255, 255, 0.6);
-}
-
-/* Base Styles */
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
+    /*
+        Clears the fixed navbar so #lead-form and every future anchor do not
+        land underneath it.
+    */
+    scroll-padding-top: 6rem;
 }
 
 body {
-  background-color: #ffffff;
-  color: #0f172a;
-  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
-  overflow-x: hidden;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    /*
+        NOTE: this hides real overflow rather than fixing it, and it breaks
+        position:sticky in descendants. The offenders are the oversized
+        blurred background blobs; remove this once they are constrained.
+    */
+    overflow-x: hidden;
 }
 
-/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+    width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+    background: var(--color-surface-sunken);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #14532d 0%, #e29d08 100%);
-  border-radius: 9999px;
+    background: linear-gradient(180deg, var(--color-brand-900) 0%, var(--color-accent-500) 100%);
+    border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #14532d;
+    background: var(--color-brand-900);
 }
 
-/* Selection */
 ::selection {
-  background-color: rgba(20, 83, 45, 0.2);
-  color: #14532d;
+    background-color: color-mix(in srgb, var(--color-brand-900) 20%, transparent);
+    color: var(--color-brand-900);
 }
 
-/* ===== GLASSMORPHISM ===== */
-.glass {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-}
-
-.glass-card {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-  border-radius: 1.5rem;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.glass-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(20, 83, 45, 0.15);
-  border-color: rgba(20, 83, 45, 0.2);
-}
-
-/* ===== GRADIENT TEXT ===== */
-.gradient-text {
-  background: linear-gradient(135deg, #14532d 0%, #22c55e 50%, #e29d08 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ===== BUTTONS ===== */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: linear-gradient(135deg, #14532d 0%, #22c55e 100%);
-  color: white;
-  font-weight: 600;
-  padding: 1rem 2rem;
-  border-radius: 9999px;
-  font-size: 1rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 15px rgba(20, 83, 45, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s;
-}
-
-.btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(20, 83, 45, 0.4);
-}
-
-.btn-primary:hover::before {
-  left: 100%;
-}
-
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: transparent;
-  color: #14532d;
-  font-weight: 600;
-  padding: 1rem 2rem;
-  border-radius: 9999px;
-  font-size: 1rem;
-  border: 2px solid #14532d;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.btn-secondary:hover {
-  background: #14532d;
-  color: white;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(20, 83, 45, 0.3);
-}
-
-/* ===== SECTION CONTAINER ===== */
-.section-container {
-  max-width: 1280px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-}
-
-@media (min-width: 640px) {
-  .section-container {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-}
-
-/* ===== HERO MESH GRADIENT ===== */
-.mesh-gradient {
-  background-color: #ffffff;
-  background-image:
-    radial-gradient(at 0% 0%, rgba(20, 83, 45, 0.12) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(226, 157, 8, 0.12) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(34, 197, 94, 0.08) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(226, 157, 8, 0.08) 0px, transparent 50%);
-}
-
-/* ===== CARDS ===== */
-.card-glass {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 1.5rem;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.card-glass:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(20, 83, 45, 0.12);
-  border-color: rgba(20, 83, 45, 0.15);
-}
-
-/* ===== FORM INPUTS ===== */
-.input-field {
-  width: 100%;
-  padding: 1rem 1.25rem;
-  background: #ffffff;
-  border: 2px solid #e2e8f0;
-  border-radius: 0.75rem;
-  font-size: 1rem;
-  color: #0f172a;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.input-field:focus {
-  outline: none;
-  border-color: #14532d;
-  box-shadow: 0 0 0 4px rgba(20, 83, 45, 0.1);
-}
-
-.input-field::placeholder {
-  color: #94a3b8;
-}
-
-/* ===== STAT NUMBER ===== */
-.stat-number {
-  font-size: 3rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #14532d 0%, #22c55e 50%, #e29d08 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-@media (min-width: 768px) {
-  .stat-number {
-    font-size: 4rem;
-  }
-}
-
-/* ===== ANIMATIONS ===== */
-@keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
-.float-animation {
-  animation: float 6s ease-in-out infinite;
-}
-
-@keyframes pulse-glow {
-
-  0%,
-  100% {
-    box-shadow: 0 0 20px rgba(20, 83, 45, 0.2);
-  }
-
-  50% {
-    box-shadow: 0 0 40px rgba(20, 83, 45, 0.4);
-  }
-}
-
-.pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-
-@keyframes gradient-shift {
-
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-.animated-gradient {
-  background-size: 200% 200%;
-  animation: gradient-shift 8s ease infinite;
-}
-
-/* ===== UTILITY CLASSES ===== */
-.text-brand-green {
-  color: #14532d !important;
-}
-
-.text-brand-green-light {
-  color: #22c55e !important;
-}
-
-.text-brand-yellow {
-  color: #e29d08 !important;
-}
-
-.text-foreground {
-  color: #0f172a !important;
-}
-
-.text-foreground-secondary {
-  color: #334155 !important;
-}
-
-.text-foreground-muted {
-  color: #64748b !important;
-}
-
-.text-foreground-light {
-  color: #94a3b8 !important;
-}
-
-.bg-background {
-  background-color: #ffffff !important;
-}
-
-.bg-background-secondary {
-  background-color: #f8fafc !important;
-}
-
-.bg-background-tertiary {
-  background-color: #f1f5f9 !important;
-}
-
-.border-light {
-  border-color: rgba(0, 0, 0, 0.05) !important;
-}
-
-.border-medium {
-  border-color: rgba(0, 0, 0, 0.1) !important;
-}
-
-/* Focus Ring */
+/* brand-500 rather than brand-900: legible on dark surfaces as well as light. */
 *:focus-visible {
-  outline: 2px solid #14532d;
-  outline-offset: 2px;
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
 }
 
-/* Hide scrollbar for carousel */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+/* ═══════════════════════════════════════════════════════════════════════
+   UTILITIES
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@utility section-container {
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+
+    @media (width >= 40rem) {
+        padding-inline: 2rem;
+    }
 }
 
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+/* The one brand gradient. Four sections previously hand-rolled their own,
+   each wrong at both endpoints (emerald-800 -> yellow-500). */
+@utility brand-gradient-text {
+    background-image: linear-gradient(
+        110deg,
+        var(--color-brand-900) 0%,
+        var(--color-brand-500) 45%,
+        var(--color-accent-500) 100%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+/* Pairs the panning keyframes with the background-size they need — the
+   animation is invisible without it. */
+@utility animate-gradient-pan {
+    background-size: 200% 200%;
+    animation: gradient-pan 8s ease infinite;
+}
+
+@keyframes gradient-pan {
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+/*
+    Content and calls to action must never be gated behind :hover — on a
+    touchscreen those rules are never emitted, so the content simply does not
+    exist. Visible by default; only dimmed where a real pointer can reveal it.
+*/
+@utility reveal-on-pointer {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+
+    @media (hover: hover) and (pointer: fine) {
+        opacity: 0;
+
+        .group:hover & {
+            opacity: 1;
+        }
+    }
+}
+
+@utility no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   REDUCED MOTION
+
+   Thirty-plus animations run on the home page. This is the global guard;
+   framer-motion is covered separately by MotionConfig reducedMotion="user".
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }

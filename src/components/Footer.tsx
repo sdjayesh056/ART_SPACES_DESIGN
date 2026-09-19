@@ -24,7 +24,7 @@ export function Footer() {
             {/* ═══════════════════════════════════════════════════════════ */}
             <div className="bg-slate-900 relative overflow-hidden">
                 <div className="absolute inset-0 opacity-20">
-                    <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(45deg,var(--brand-green)_0%,transparent_100%)]" />
+                    <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(45deg,var(--color-brand-900)_0%,transparent_100%)]" />
                 </div>
 
                 <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-16">
@@ -35,7 +35,7 @@ export function Footer() {
                         transition={{ duration: 0.6 }}
                         className="relative rounded-3xl overflow-hidden bg-white/5 border border-white/10"
                     >
-                        <div className="absolute inset-0 bg-gradient-to-r from-[var(--brand-green)]/90 to-emerald-900/90" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-brand-900/90 to-emerald-900/90" />
                         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIyIi8+PC9nPjwvZz48L3N2Zz4=')] opacity-30" />
 
                         <div className="relative px-8 py-12 md:px-12 md:py-16 flex flex-col md:flex-row items-center justify-between gap-8">
@@ -54,7 +54,7 @@ export function Footer() {
                             </div>
                             <Link
                                 href="/contact"
-                                className="group flex items-center gap-4 px-8 py-5 rounded-full bg-white text-[var(--brand-green)] font-bold text-sm uppercase tracking-wider hover:bg-[var(--brand-yellow)] hover:text-[var(--brand-green)] transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1"
+                                className="group flex items-center gap-4 px-8 py-5 rounded-full bg-white text-brand-900 font-bold text-sm uppercase tracking-wider hover:bg-accent-500 hover:text-brand-900 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1"
                             >
                                 Get Started
                                 <ArrowUpRight
@@ -129,7 +129,7 @@ export function Footer() {
                                         viewport={{ once: true }}
                                         transition={{ delay: idx * 0.1 }}
                                         whileHover={{ scale: 1.1, y: -2 }}
-                                        className="w-11 h-11 flex items-center justify-center rounded-full bg-white border border-slate-200 text-slate-600 shadow-sm hover:border-[var(--brand-green)] hover:bg-[var(--brand-green)] hover:text-white transition-all duration-300"
+                                        className="w-11 h-11 flex items-center justify-center rounded-full bg-white border border-slate-200 text-slate-600 shadow-sm hover:border-brand-900 hover:bg-brand-900 hover:text-white transition-all duration-300"
                                     >
                                         <social.icon className="w-4 h-4" aria-hidden="true" />
                                     </motion.a>
@@ -151,7 +151,7 @@ export function Footer() {
                                 className="md:px-8 md:border-l border-slate-200"
                             >
                                 <h2 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-8 flex items-center gap-2">
-                                    <span className="w-2 h-0.5 bg-[var(--brand-green)] rounded-full" />
+                                    <span className="w-2 h-0.5 bg-brand-900 rounded-full" />
                                     {column.heading}
                                 </h2>
                                 <ul className="space-y-2">
@@ -161,7 +161,7 @@ export function Footer() {
                                                 href={link.href}
                                                 className="py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-all flex items-center gap-2 group"
                                             >
-                                                <span className="w-1 h-1 bg-slate-300 rounded-full group-hover:bg-[var(--brand-green)] group-hover:scale-150 transition-all duration-300" />
+                                                <span className="w-1 h-1 bg-slate-300 rounded-full group-hover:bg-brand-900 group-hover:scale-150 transition-all duration-300" />
                                                 {link.label}
                                             </Link>
                                         </li>
@@ -179,12 +179,12 @@ export function Footer() {
                             className="md:px-8 md:border-l border-slate-200"
                         >
                             <h2 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-8 flex items-center gap-2">
-                                <span className="w-2 h-0.5 bg-[var(--brand-green)] rounded-full" />
+                                <span className="w-2 h-0.5 bg-brand-900 rounded-full" />
                                 Studio
                             </h2>
                             <ul className="space-y-2">
                                 <li className="flex items-start gap-3 text-sm font-semibold text-slate-600 mb-4">
-                                    <span className="w-8 h-8 shrink-0 rounded-lg bg-white border border-slate-100 flex items-center justify-center text-[var(--brand-green)] shadow-sm">
+                                    <span className="w-8 h-8 shrink-0 rounded-lg bg-white border border-slate-100 flex items-center justify-center text-brand-900 shadow-sm">
                                         <MapPin className="w-4 h-4" aria-hidden="true" />
                                     </span>
                                     <address className="not-italic mt-1">
@@ -198,7 +198,7 @@ export function Footer() {
                                         href={STUDIO.phone.href}
                                         className="py-2 flex items-center gap-3 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors group"
                                     >
-                                        <span className="w-8 h-8 shrink-0 rounded-lg bg-white border border-slate-100 flex items-center justify-center text-[var(--brand-green)] shadow-sm group-hover:scale-110 transition-transform">
+                                        <span className="w-8 h-8 shrink-0 rounded-lg bg-white border border-slate-100 flex items-center justify-center text-brand-900 shadow-sm group-hover:scale-110 transition-transform">
                                             <Phone className="w-4 h-4" aria-hidden="true" />
                                         </span>
                                         {STUDIO.phone.display}
@@ -209,7 +209,7 @@ export function Footer() {
                                         href={STUDIO.email.href}
                                         className="py-2 flex items-center gap-3 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors group"
                                     >
-                                        <span className="w-8 h-8 shrink-0 rounded-lg bg-white border border-slate-100 flex items-center justify-center text-[var(--brand-green)] shadow-sm group-hover:scale-110 transition-transform">
+                                        <span className="w-8 h-8 shrink-0 rounded-lg bg-white border border-slate-100 flex items-center justify-center text-brand-900 shadow-sm group-hover:scale-110 transition-transform">
                                             <Mail className="w-4 h-4" aria-hidden="true" />
                                         </span>
                                         {STUDIO.email.display}
@@ -230,10 +230,10 @@ export function Footer() {
                             <li key={link.label}>
                                 <Link
                                     href={link.href}
-                                    className="py-2 inline-block text-xs text-slate-600 hover:text-[var(--brand-green)] transition-all uppercase tracking-wider font-bold relative group"
+                                    className="py-2 inline-block text-xs text-slate-600 hover:text-brand-900 transition-all uppercase tracking-wider font-bold relative group"
                                 >
                                     {link.label}
-                                    <span className="absolute bottom-1 left-0 w-0 h-0.5 bg-[var(--brand-green)] group-hover:w-full transition-all duration-300" />
+                                    <span className="absolute bottom-1 left-0 w-0 h-0.5 bg-brand-900 group-hover:w-full transition-all duration-300" />
                                 </Link>
                             </li>
                         ))}

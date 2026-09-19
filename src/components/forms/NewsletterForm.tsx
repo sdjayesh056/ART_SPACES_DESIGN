@@ -25,7 +25,7 @@ export function NewsletterForm() {
             <form
                 action={formAction}
                 noValidate
-                className="flex w-full md:w-auto max-w-md bg-white rounded-full p-1.5 border border-slate-200 shadow-sm hover:shadow-md focus-within:border-[var(--brand-green)] focus-within:ring-1 focus-within:ring-[var(--brand-green)] transition-all duration-300"
+                className="flex w-full md:w-auto max-w-md bg-white rounded-full p-1.5 border border-slate-200 shadow-sm hover:shadow-md focus-within:border-brand-900 focus-within:ring-1 focus-within:ring-brand-900 transition-all duration-300"
             >
                 <label htmlFor={emailId} className="sr-only">
                     Email address for the design newsletter
@@ -59,7 +59,7 @@ export function NewsletterForm() {
                 <button
                     type="submit"
                     disabled={isPending}
-                    className="shrink-0 inline-flex items-center gap-2 px-4 md:px-6 py-3 rounded-full bg-slate-900 text-white text-xs font-bold uppercase tracking-wider hover:bg-[var(--brand-green)] transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-70"
+                    className="shrink-0 inline-flex items-center gap-2 px-4 md:px-6 py-3 rounded-full bg-slate-900 text-white text-xs font-bold uppercase tracking-wider hover:bg-brand-900 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-70"
                 >
                     {isPending && <Loader2 size={14} className="animate-spin" aria-hidden="true" />}
                     {isPending ? "Sending" : "Subscribe"}
@@ -71,7 +71,7 @@ export function NewsletterForm() {
                 role="status"
                 aria-live="polite"
                 className={`mt-2 ml-1 text-sm font-medium ${
-                    state.status === "error" ? "text-red-600" : "text-[var(--brand-green)]"
+                    state.status === "error" ? "text-red-600" : "text-brand-900"
                 }`}
             >
                 {state.message}

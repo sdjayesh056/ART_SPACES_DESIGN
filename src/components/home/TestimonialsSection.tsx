@@ -108,7 +108,7 @@ const TestimonialCard = ({ testimonial }: { testimonial: (typeof testimonials)[n
                 transformStyle: "preserve-3d",
                 perspective: 1000,
             }}
-            className="group relative bg-white/50 backdrop-blur-md rounded-[2rem] p-8 border border-white/40 shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-[400px] w-[350px] md:w-[400px] flex-shrink-0 mx-4"
+            className="group relative bg-white/50 backdrop-blur-md rounded-[2rem] p-8 border border-white/40 shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-[400px] w-[350px] md:w-[400px] shrink-0 mx-4"
         >
             {/* Gradient Overlay on Hover */}
             <div
@@ -125,7 +125,7 @@ const TestimonialCard = ({ testimonial }: { testimonial: (typeof testimonials)[n
             </div>
 
             {/* Content */}
-            <div className="relative z-10 flex-grow" style={{ transform: "translateZ(20px)" }}>
+            <div className="relative z-10 grow" style={{ transform: "translateZ(20px)" }}>
                 <div className="flex gap-1 mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
                         <Star key={i} size={16} className="text-amber-400 fill-amber-400" />
@@ -189,7 +189,7 @@ export function TestimonialsSection() {
                         <span className="text-xs font-bold text-slate-600 tracking-wider uppercase">Voices of Satisfaction</span>
                     </div>
                     <h2 className="text-3xl md:text-5xl font-bold text-slate-900 mb-6">
-                        Trusted by <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-800 via-green-500 to-yellow-500">Visionaries</span>
+                        Trusted by <span className="brand-gradient-text">Visionaries</span>
                     </h2>
                     <p className="text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
                         Don&apos;t just take our word for it. Hear from the homeowners, CEOs, and developers who have experienced the ArtSpaces transformation.

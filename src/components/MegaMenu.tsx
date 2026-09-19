@@ -55,8 +55,8 @@ export function MegaMenu({ title, items }: MegaMenuProps) {
                                                 <span
                                                     className={`text-xl font-medium transition-all duration-300 ${
                                                         isActive
-                                                            ? "text-[var(--brand-yellow)] bg-[var(--brand-green)] translate-x-2 py-2 px-6 rounded-2xl"
-                                                            : "text-[var(--brand-green)]"
+                                                            ? "text-accent-on-brand bg-brand-900 translate-x-2 py-2 px-6 rounded-2xl"
+                                                            : "text-brand-900"
                                                     }`}
                                                 >
                                                     {item.title}
@@ -91,7 +91,7 @@ export function MegaMenu({ title, items }: MegaMenuProps) {
                         {activeItem && (
                             <Link
                                 href={activeItem.href}
-                                className="inline-flex items-center gap-2 mt-4 text-xs font-bold uppercase tracking-widest text-slate-800 hover:text-[var(--brand-green)] transition-colors"
+                                className="inline-flex items-center gap-2 mt-4 text-xs font-bold uppercase tracking-widest text-slate-800 hover:text-brand-900 transition-colors"
                             >
                                 View Details
                             </Link>

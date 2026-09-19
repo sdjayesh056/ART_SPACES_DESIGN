@@ -40,7 +40,7 @@ export function HeroSection() {
                         className="text-4xl md:text-5xl font-extrabold leading-tight text-slate-900"
                     >
                         Design Spaces That <br />
-                        <span className="bg-gradient-to-r from-emerald-800 via-green-500 to-yellow-500 bg-clip-text text-transparent">
+                        <span className="brand-gradient-text">
                             Inspire Modern Living
                         </span>
                     </motion.h1>
@@ -119,7 +119,20 @@ export function HeroSection() {
                 >
                     {/* Glass Frame */}
                     <div className="relative w-full max-w-lg aspect-square rounded-3xl bg-white/40 backdrop-blur-2xl border border-white/40 shadow-2xl overflow-hidden">
-                        <Image src="/Logos/Home_Right_Visuals.png" alt="home-right-visuals" width={512} height={612} className="h-128" />
+                        {/*
+                            `fill` rather than width/height: the source is
+                            2030x1536 but was declared 512x612, then sized by
+                            `h-128` — a class that does not exist and emitted
+                            nothing. Three conflicting ratios; now the image
+                            simply covers the square frame.
+                        */}
+                        <Image
+                            src="/Logos/Home_Right_Visuals.png"
+                            alt="A contemporary living space designed by ArtSpaces, with layered lighting and natural materials"
+                            fill
+                            sizes="(max-width: 1024px) 90vw, 512px"
+                            className="object-cover"
+                        />
                     </div>
                 </motion.div>
             </div>
