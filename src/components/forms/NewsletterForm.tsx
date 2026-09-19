@@ -71,7 +71,7 @@ export function NewsletterForm() {
                 role="status"
                 aria-live="polite"
                 className={`mt-2 ml-1 text-sm font-medium ${
-                    state.status === "error" ? "text-red-600" : "text-brand-900"
+                    state.status === "error" ? "text-danger" : "text-brand-900"
                 }`}
             >
                 {state.message}

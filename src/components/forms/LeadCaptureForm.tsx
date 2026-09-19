@@ -9,7 +9,7 @@ import { SERVICE_OPTIONS } from "@/data/lead-services";
 import { HONEYPOT_FIELD, initialLeadFormState, type LeadFormState } from "@/types/lead";
 
 const INPUT_CLASS =
-    "w-full bg-slate-200 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-slate-900 placeholder-slate-400 font-medium transition-all focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/50 focus:bg-white";
+    "w-full bg-slate-200 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-slate-900 placeholder-slate-400 font-medium transition-all focus:outline-none focus:border-accent-400 focus:ring-2 focus:ring-accent-400/50 focus:bg-white";
 
 const LABEL_CLASS = "block text-sm font-medium text-slate-200 mb-2 ml-1";
 
@@ -38,7 +38,7 @@ export function LeadCaptureForm() {
             {state.status === "error" && (
                 <p
                     role="alert"
-                    className="rounded-xl border border-red-300/40 bg-red-500/15 px-4 py-3 text-sm font-medium text-red-50"
+                    className="rounded-xl border border-danger-soft/40 bg-danger/25 px-4 py-3 text-sm font-medium text-danger-soft"
                 >
                     {state.message}
                 </p>
@@ -172,7 +172,7 @@ export function LeadCaptureForm() {
                 disabled={isPending}
                 whileHover={isPending ? undefined : { scale: 1.02 }}
                 whileTap={isPending ? undefined : { scale: 0.98 }}
-                className="w-full bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all mt-2 disabled:cursor-not-allowed disabled:opacity-70"
+                className="w-full bg-gradient-to-r from-accent-400 to-accent-600 hover:from-accent-300 hover:to-accent-500 text-brand-950 font-bold py-4 rounded-xl shadow-lg shadow-accent-500/20 flex items-center justify-center gap-2 transition-all mt-2 disabled:cursor-not-allowed disabled:opacity-70"
             >
                 {isPending ? (
                     <>
@@ -217,7 +217,7 @@ function Field({ id, errorId, label, optional, errors, children }: FieldProps) {
             </label>
             <div className="relative">{children}</div>
             {errors && errors.length > 0 && (
-                <p id={errorId} className="mt-2 ml-1 text-sm font-medium text-amber-200">
+                <p id={errorId} className="mt-2 ml-1 text-sm font-medium text-accent-300">
                     {errors[0]}
                 </p>
             )}
@@ -235,8 +235,8 @@ function SuccessPanel({ message }: { message: LeadFormState["message"] }) {
             aria-live="polite"
             className="flex flex-col items-center text-center py-8"
         >
-            <div className="w-16 h-16 rounded-full bg-amber-400/20 border border-amber-300/40 flex items-center justify-center mb-6">
-                <CheckCircle2 size={32} className="text-amber-300" aria-hidden="true" />
+            <div className="w-16 h-16 rounded-full bg-accent-400/20 border border-accent-300/40 flex items-center justify-center mb-6">
+                <CheckCircle2 size={32} className="text-accent-300" aria-hidden="true" />
             </div>
             <h3 className="text-2xl font-bold text-white mb-3">Enquiry received</h3>
             <p className="text-slate-100 leading-relaxed max-w-sm">{message}</p>

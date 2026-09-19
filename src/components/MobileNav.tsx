@@ -225,7 +225,7 @@ function MobileNavPanel({ onClose }: { onClose: () => void }) {
                                 className="w-full flex items-center justify-between py-4 group"
                             >
                                 <span className="flex items-center gap-4">
-                                    <span className="text-sm font-mono text-emerald-400">
+                                    <span className="text-sm font-mono text-brand-400">
                                         0{index + 1}
                                     </span>
                                     <span className="text-2xl font-bold tracking-tight">
@@ -258,16 +258,16 @@ function MobileNavPanel({ onClose }: { onClose: () => void }) {
                                                     onClick={onClose}
                                                     className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors group"
                                                 >
-                                                    <span className="shrink-0 w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-emerald-400">
+                                                    <span className="shrink-0 w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-brand-400">
                                                         <item.icon className="w-5 h-5" aria-hidden="true" />
                                                     </span>
                                                     <span className="flex-1 min-w-0">
                                                         <span className="flex items-center gap-2">
-                                                            <span className="font-semibold text-white group-hover:text-emerald-400 transition-colors">
+                                                            <span className="font-semibold text-white group-hover:text-brand-400 transition-colors">
                                                                 {item.title}
                                                             </span>
                                                             {item.badge && (
-                                                                <span className="px-2 py-0.5 text-[10px] font-bold uppercase rounded-full bg-emerald-500 text-white">
+                                                                <span className="px-2 py-0.5 text-[10px] font-bold uppercase rounded-full bg-brand-500 text-brand-950">
                                                                     {item.badge}
                                                                 </span>
                                                             )}
@@ -277,7 +277,7 @@ function MobileNavPanel({ onClose }: { onClose: () => void }) {
                                                         </span>
                                                     </span>
                                                     <ArrowRight
-                                                        className="w-4 h-4 text-white/40 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all"
+                                                        className="w-4 h-4 text-white/40 group-hover:text-brand-400 group-hover:translate-x-1 transition-all"
                                                         aria-hidden="true"
                                                     />
                                                 </Link>
@@ -298,15 +298,15 @@ function MobileNavPanel({ onClose }: { onClose: () => void }) {
                                 className="flex items-center justify-between py-4 group border-b border-white/10"
                             >
                                 <span className="flex items-center gap-4">
-                                    <span className="text-sm font-mono text-amber-400">
+                                    <span className="text-sm font-mono text-accent-400">
                                         0{MENU_SECTIONS.length + index + 1}
                                     </span>
-                                    <span className="text-2xl font-bold tracking-tight group-hover:text-amber-400 transition-colors">
+                                    <span className="text-2xl font-bold tracking-tight group-hover:text-accent-400 transition-colors">
                                         {item.label}
                                     </span>
                                 </span>
                                 <ArrowRight
-                                    className="w-6 h-6 text-white/70 group-hover:text-amber-400 group-hover:translate-x-1 transition-all"
+                                    className="w-6 h-6 text-white/70 group-hover:text-accent-400 group-hover:translate-x-1 transition-all"
                                     aria-hidden="true"
                                 />
                             </Link>
@@ -326,7 +326,7 @@ function MobileNavPanel({ onClose }: { onClose: () => void }) {
                     <Link
                         href={PRIMARY_CTA.href}
                         onClick={onClose}
-                        className="flex items-center justify-center gap-3 bg-emerald-500 text-white px-6 py-4 rounded-full font-bold text-sm uppercase tracking-widest hover:bg-emerald-600 transition-colors"
+                        className="flex items-center justify-center gap-3 bg-accent-500 text-brand-950 px-6 py-4 rounded-full font-bold text-sm uppercase tracking-widest hover:bg-accent-400 transition-colors"
                     >
                         {PRIMARY_CTA.label}
                         <ArrowRight className="w-4 h-4" aria-hidden="true" />

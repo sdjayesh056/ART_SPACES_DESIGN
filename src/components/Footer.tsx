@@ -1,12 +1,10 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { ArrowUpRight, Mail, MapPin, Phone, Sparkles } from "lucide-react";
 
 import { NewsletterForm } from "@/components/forms/NewsletterForm";
+import { Reveal } from "@/components/ui/Reveal";
 import { FOOTER_COLUMNS, LEGAL_LINKS } from "@/data/navigation";
 import { SOCIAL_LINKS, STUDIO } from "@/data/studio";
 
@@ -28,14 +26,10 @@ export function Footer() {
                 </div>
 
                 <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-16">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
+                    <Reveal
                         className="relative rounded-3xl overflow-hidden bg-white/5 border border-white/10"
                     >
-                        <div className="absolute inset-0 bg-gradient-to-r from-brand-900/90 to-emerald-900/90" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-brand-900/90 to-brand-950/90" />
                         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIyIi8+PC9nPjwvZz48L3N2Zz4=')] opacity-30" />
 
                         <div className="relative px-8 py-12 md:px-12 md:py-16 flex flex-col md:flex-row items-center justify-between gap-8">
@@ -63,7 +57,7 @@ export function Footer() {
                                 />
                             </Link>
                         </div>
-                    </motion.div>
+                    </Reveal>
                 </div>
             </div>
 
@@ -77,10 +71,7 @@ export function Footer() {
                 </div>
 
                 {/* 1. NEWSLETTER STRIP */}
-                <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                <Reveal
                     className="py-12 border-b border-slate-200 flex flex-col md:flex-row items-center justify-between gap-8 relative z-10"
                 >
                     <div>
@@ -92,7 +83,7 @@ export function Footer() {
                         </p>
                     </div>
                     <NewsletterForm />
-                </motion.div>
+                </Reveal>
 
                 {/* 2. MAIN GRID */}
                 <div className="py-16 grid grid-cols-1 lg:grid-cols-12 gap-12 border-b border-slate-200 relative z-10">
@@ -119,20 +110,15 @@ export function Footer() {
                             spaces through structure, light, and material innovation.
                         </p>
                         <ul className="flex gap-4 list-none p-0">
-                            {SOCIAL_LINKS.map((social, idx) => (
+                            {SOCIAL_LINKS.map((social) => (
                                 <li key={social.label}>
-                                    <motion.a
+                                    <a
                                         href={social.href}
                                         aria-label={social.label}
-                                        initial={{ opacity: 0, scale: 0.8 }}
-                                        whileInView={{ opacity: 1, scale: 1 }}
-                                        viewport={{ once: true }}
-                                        transition={{ delay: idx * 0.1 }}
-                                        whileHover={{ scale: 1.1, y: -2 }}
-                                        className="w-11 h-11 flex items-center justify-center rounded-full bg-white border border-slate-200 text-slate-600 shadow-sm hover:border-brand-900 hover:bg-brand-900 hover:text-white transition-all duration-300"
+                                        className="w-11 h-11 flex items-center justify-center rounded-full bg-white border border-slate-200 text-slate-600 shadow-sm hover:border-brand-900 hover:bg-brand-900 hover:text-white transition-all duration-300 hover:-translate-y-0.5 hover:scale-110"
                                     >
                                         <social.icon className="w-4 h-4" aria-hidden="true" />
-                                    </motion.a>
+                                    </a>
                                 </li>
                             ))}
                         </ul>
@@ -141,15 +127,13 @@ export function Footer() {
                     {/* Link Columns */}
                     <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0">
                         {FOOTER_COLUMNS.map((column, columnIndex) => (
-                            <motion.nav
+                            <Reveal
                                 key={column.heading}
-                                aria-label={column.heading}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: 0.1 * (columnIndex + 1) }}
+                                as="div"
+                                delay={0.1 * (columnIndex + 1)}
                                 className="md:px-8 md:border-l border-slate-200"
                             >
+                                <nav aria-label={column.heading}>
                                 <h2 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-8 flex items-center gap-2">
                                     <span className="w-2 h-0.5 bg-brand-900 rounded-full" />
                                     {column.heading}
@@ -167,17 +151,12 @@ export function Footer() {
                                         </li>
                                     ))}
                                 </ul>
-                            </motion.nav>
+                            </nav>
+                            </Reveal>
                         ))}
 
                         {/* Studio contact */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.3 }}
-                            className="md:px-8 md:border-l border-slate-200"
-                        >
+                        <Reveal delay={0.3} className="md:px-8 md:border-l border-slate-200">
                             <h2 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-8 flex items-center gap-2">
                                 <span className="w-2 h-0.5 bg-brand-900 rounded-full" />
                                 Studio
@@ -216,7 +195,7 @@ export function Footer() {
                                     </a>
                                 </li>
                             </ul>
-                        </motion.div>
+                        </Reveal>
                     </div>
                 </div>
 

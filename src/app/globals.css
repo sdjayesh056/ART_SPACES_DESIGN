@@ -63,6 +63,15 @@
     --color-background: #ffffff;
     --color-foreground: #0f172a;
 
+    /*
+        Error states. Semantic, not decorative — form validation needs a red,
+        and it should come from the token layer like everything else rather
+        than reaching past the palette for red-600. `danger` reads on light
+        surfaces (4.83:1 on white), `danger-soft` on dark ones.
+    */
+    --color-danger: #dc2626;
+    --color-danger-soft: #fecaca;
+
     /* ── Typography ─────────────────────────────────────────────────────── */
     --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
     --font-mono: var(--font-geist-mono), ui-monospace, monospace;
