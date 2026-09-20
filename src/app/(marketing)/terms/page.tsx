@@ -8,6 +8,7 @@ import { Section } from "@/components/ui/Section";
 import { STUDIO } from "@/data/studio";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/terms" },
   title: "Terms of Service",
   description:
     "Terms covering use of the ArtSpaces Design website. Project work is governed by a separate signed agreement.",

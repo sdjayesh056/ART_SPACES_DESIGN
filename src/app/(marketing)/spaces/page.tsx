@@ -12,6 +12,7 @@ import { menuData } from "@/data/navigation";
 import { accentAt } from "@/lib/accents";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/spaces" },
   title: "Spaces We Design",
   description:
     "Residential, commercial, hospitality and retail interior design by ArtSpaces Design, Mumbai. Choose the kind of space you are planning.",

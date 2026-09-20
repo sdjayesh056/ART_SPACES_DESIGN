@@ -10,6 +10,7 @@ import { Section } from "@/components/ui/Section";
 import { STUDIO } from "@/data/studio";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/about" },
   title: "About the Studio",
   description:
     "ArtSpaces Design is an interior and architectural design studio in Mumbai working on residential, commercial, hospitality and retail spaces across India.",

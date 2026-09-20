@@ -9,6 +9,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/careers" },
   title: "Careers",
   description: "Open roles and how to apply at ArtSpaces Design, Mumbai.",
 };

@@ -29,6 +29,15 @@ export async function generateMetadata({
   return {
     title: project.title,
     description: project.description,
+    alternates: { canonical: `/portfolio/${project.slug}` },
+    openGraph: {
+      type: "article",
+      title: project.title,
+      description: project.description,
+      url: `/portfolio/${project.slug}`,
+      // Overrides the site-wide card with this project's own photograph.
+      images: [{ url: project.image, alt: `${project.title} by ArtSpaces Design` }],
+    },
   };
 }
 

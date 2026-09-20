@@ -12,6 +12,7 @@ import { menuData } from "@/data/navigation";
 import { accentAt } from "@/lib/accents";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/consultation" },
   title: "Consultation",
   description:
     "How working with ArtSpaces Design starts: our process, virtual walkthroughs, booking a free consultation, and the team you will work with.",

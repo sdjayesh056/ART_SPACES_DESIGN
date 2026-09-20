@@ -9,6 +9,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/consultation/virtual-tours" },
   title: "Virtual Tours",
   description: "Immersive 3D interior walkthroughs from ArtSpaces Design — see your space before construction begins.",
 };

@@ -9,6 +9,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/portfolio/styles" },
   title: "Style Gallery",
   description: "Interior design styles by ArtSpaces Design — modern, minimal, rustic, industrial and heritage.",
 };

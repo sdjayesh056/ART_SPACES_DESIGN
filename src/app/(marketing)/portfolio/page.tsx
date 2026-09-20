@@ -9,6 +9,7 @@ import { Section } from "@/components/ui/Section";
 import { STUDIO } from "@/data/studio";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/portfolio" },
   title: "Interior Design Portfolio",
   description:
     "Residential, commercial, hospitality and retail interiors delivered by ArtSpaces Design across India. Browse the full portfolio by category.",

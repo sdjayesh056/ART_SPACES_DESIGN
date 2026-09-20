@@ -1,7 +1,9 @@
 import React from "react";
 
+import { JsonLd } from "@/components/JsonLd";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 
 /**
  * Site chrome for every public marketing page.
@@ -16,6 +18,10 @@ export default function MarketingLayout({
 }) {
   return (
     <>
+      {/* Site-wide entities. Page-level BreadcrumbList is emitted by PageHero. */}
+      <JsonLd data={websiteJsonLd()} />
+      <JsonLd data={organizationJsonLd()} />
+
       {/* First focusable element, so keyboard users can skip the navbar. */}
       <a
         href="#main-content"

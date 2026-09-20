@@ -9,6 +9,7 @@ import { Section } from "@/components/ui/Section";
 import { STUDIO } from "@/data/studio";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/contact" },
   title: "Contact",
   description:
     "Talk to the ArtSpaces Design studio in Mumbai about a residential, commercial, hospitality or retail interior project. Free consultation, reply within 24 hours.",

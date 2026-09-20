@@ -37,9 +37,24 @@ export async function generateMetadata({
   const entry = findVertical(vertical);
   if (!entry) return { title: "Not found" };
 
+  const description = `${entry.description} ${entry.title} interior design by ArtSpaces Design, ${STUDIO.address.locality}.`;
+
   return {
     title: `${entry.title} Interior Design`,
-    description: `${entry.description} ${entry.title} interior design by ArtSpaces Design, ${STUDIO.address.locality}.`,
+    description,
+    alternates: { canonical: `/spaces/${entry.id}` },
+    openGraph: {
+      title: `${entry.title} Interior Design`,
+      description,
+      url: `/spaces/${entry.id}`,
+      /*
+        Declaring an `openGraph` object REPLACES the parent's rather than
+        merging into it, and that also suppresses the automatic injection of
+        the root opengraph-image — so an override without `images` ships a
+        card with no picture. Uses the vertical's own photograph.
+      */
+      images: [{ url: entry.image, alt: `${entry.title} interior design by ArtSpaces` }],
+    },
   };
 }
 

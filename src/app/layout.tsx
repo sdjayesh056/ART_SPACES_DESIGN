@@ -1,7 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { MotionProvider } from "@/components/providers/MotionProvider";
+import { STUDIO } from "@/data/studio";
+import { BRAND } from "@/lib/brand";
+import { SITE_URL } from "@/lib/seo";
 
 /*
   `subsets` is required for next/font to emit the preload link — without it
@@ -20,16 +23,52 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
+const DESCRIPTION =
+  "ArtSpaces Design is a Mumbai-based interior and architectural design studio creating residential, commercial, hospitality and retail spaces across India. Book a free consultation.";
+
 export const metadata: Metadata = {
-  // TODO(seo): metadataBase, openGraph, twitter, canonical, sitemap.ts,
-  // robots.ts and ProfessionalService JSON-LD still outstanding — the last
-  // needs the real NAP, which is still a placeholder in src/data/studio.ts.
+  // Makes every relative canonical, OG and icon URL in the tree absolute.
+  metadataBase: new URL(SITE_URL),
+
   title: {
-    default: "ArtSpaces Design | Luxury Interior Design Studio in Mumbai",
-    template: "%s | ArtSpaces Design",
+    default: `${STUDIO.name} | Luxury Interior Design Studio in Mumbai`,
+    // Every route below only sets its own `title`; this appends the brand.
+    template: `%s | ${STUDIO.name}`,
   },
-  description:
-    "ArtSpaces Design is a Mumbai-based interior and architectural design studio creating residential, commercial, hospitality and retail spaces across India. Book a free consultation.",
+  description: DESCRIPTION,
+
+  alternates: { canonical: "/" },
+
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    siteName: STUDIO.name,
+    url: "/",
+    title: `${STUDIO.name} | Luxury Interior Design Studio in Mumbai`,
+    description: DESCRIPTION,
+    // Images come from src/app/opengraph-image.tsx unless a route overrides them.
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: `${STUDIO.name} | Luxury Interior Design Studio in Mumbai`,
+    description: DESCRIPTION,
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
+
+  // TODO: ProfessionalService / LocalBusiness JSON-LD is deliberately NOT
+  // emitted — see the note in src/lib/seo.ts. It needs a real street address,
+  // postal code, geo and phone, all still placeholders in src/data/studio.ts.
+};
+
+export const viewport: Viewport = {
+  themeColor: BRAND.green900,
+  colorScheme: "light",
 };
 
 /**

@@ -9,6 +9,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/consultation/process" },
   title: "Design Process",
   description: "The ArtSpaces Design process, from first consultation through concept, detailing, procurement and handover.",
 };

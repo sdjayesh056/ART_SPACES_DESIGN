@@ -2,6 +2,9 @@ import React from "react";
 import Link from "next/link";
 import { ChevronRight, type LucideIcon } from "lucide-react";
 
+import { JsonLd } from "@/components/JsonLd";
+import { breadcrumbJsonLd } from "@/lib/seo";
+
 import { Container } from "./Container";
 import { Eyebrow } from "./Eyebrow";
 import { Reveal } from "./Reveal";
@@ -42,6 +45,11 @@ export function PageHero({
                 <div className="absolute -left-24 -top-24 h-[min(28rem,65vw)] w-[min(28rem,65vw)] rounded-full bg-brand-100/60 blur-[120px]" />
                 <div className="absolute -right-24 top-10 h-[min(24rem,60vw)] w-[min(24rem,60vw)] rounded-full bg-accent-100/50 blur-[120px]" />
             </div>
+
+            {/* Structured data mirrors the visible trail — one source, no drift. */}
+            {breadcrumbs && breadcrumbs.length > 0 && (
+                <JsonLd data={breadcrumbJsonLd(breadcrumbs)} />
+            )}
 
             <Container className="relative z-10">
                 {breadcrumbs && breadcrumbs.length > 0 && (

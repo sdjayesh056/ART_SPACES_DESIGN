@@ -8,6 +8,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/consultation/booking" },
   title: "Book a Free Consultation",
   description:
     "Book a free interior design consultation with ArtSpaces Design, Mumbai. Tell us about your space and we will reply within 24 hours.",

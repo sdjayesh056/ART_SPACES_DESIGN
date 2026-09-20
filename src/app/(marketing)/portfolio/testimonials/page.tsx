@@ -10,6 +10,7 @@ import { TESTIMONIALS } from "@/data/testimonials";
 import { accentAt } from "@/lib/accents";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/portfolio/testimonials" },
   title: "Client Testimonials",
   description:
     "What homeowners, founders and developers say about working with ArtSpaces Design on their interiors.",

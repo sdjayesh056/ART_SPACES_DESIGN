@@ -8,6 +8,7 @@ import { Section } from "@/components/ui/Section";
 import { STUDIO } from "@/data/studio";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/privacy" },
   title: "Privacy Policy",
   description:
     "How ArtSpaces Design handles the information you send through the website's enquiry and newsletter forms.",
