@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 import type { MenuItem } from "@/types/navigation";
@@ -23,18 +23,18 @@ export function MegaMenu({ title, items }: MegaMenuProps) {
     const activeItem = items.find((item) => item.id === hoveredId) ?? items[0];
 
     return (
-        <motion.div
+        <m.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="w-full overflow-hidden shadow-2xl rounded-b-3xl border-t border-white/10 bg-slate-200"
+            className="w-full overflow-hidden shadow-2xl rounded-b-3xl border-t border-white/10 bg-surface-sunken"
         >
             <div className="max-w-7xl mx-auto flex min-h-[450px]">
                 {/* LEFT COLUMN: Navigation & List */}
-                <div className="w-1/3 py-10 pl-8 pr-12 flex flex-col justify-between border-r border-slate-300/60 relative z-10">
+                <div className="w-1/3 py-10 pl-8 pr-12 flex flex-col justify-between border-r border-line-strong relative z-10">
                     <div>
-                        <p className="text-xs font-bold uppercase tracking-[0.3em] mb-8 text-slate-500">
+                        <p className="text-xs font-bold uppercase tracking-[0.3em] mb-8 text-ink-subtle">
                             {title}
                         </p>
 
@@ -62,7 +62,7 @@ export function MegaMenu({ title, items }: MegaMenuProps) {
                                                     {item.title}
                                                 </span>
                                                 {item.badge && (
-                                                    <span className="px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-widest border border-slate-400/50 rounded-full text-slate-600">
+                                                    <span className="px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-widest border border-line-strong rounded-full text-ink-muted">
                                                         {item.badge}
                                                     </span>
                                                 )}
@@ -85,13 +85,13 @@ export function MegaMenu({ title, items }: MegaMenuProps) {
 
                     {/* Footer / Context */}
                     <div className="mt-8">
-                        <p className="text-sm text-slate-600 max-w-[280px] leading-relaxed">
+                        <p className="text-sm text-ink-muted max-w-[280px] leading-relaxed">
                             {activeItem?.description}
                         </p>
                         {activeItem && (
                             <Link
                                 href={activeItem.href}
-                                className="inline-flex items-center gap-2 mt-4 text-xs font-bold uppercase tracking-widest text-slate-800 hover:text-brand-900 transition-colors"
+                                className="inline-flex items-center gap-2 mt-4 text-xs font-bold uppercase tracking-widest text-ink hover:text-brand-900 transition-colors"
                             >
                                 View Details
                             </Link>
@@ -100,10 +100,10 @@ export function MegaMenu({ title, items }: MegaMenuProps) {
                 </div>
 
                 {/* RIGHT COLUMN: Visual Stage */}
-                <div className="w-2/3 relative overflow-hidden bg-slate-300/40" aria-hidden="true">
-                    <AnimatePresence mode="popLayout">
+                <div className="w-2/3 relative overflow-hidden bg-surface-sunken" aria-hidden="true">
+                    <AnimatePresence>
                         {activeItem && (
-                            <motion.div
+                            <m.div
                                 key={activeItem.id}
                                 initial={{ opacity: 0, scale: 1.1 }}
                                 animate={{ opacity: 1, scale: 1 }}
@@ -118,7 +118,7 @@ export function MegaMenu({ title, items }: MegaMenuProps) {
 
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
 
-                                <motion.div
+                                <m.div
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.2 }}
@@ -129,12 +129,12 @@ export function MegaMenu({ title, items }: MegaMenuProps) {
                                     <p className="text-white/90 text-sm max-w-md">
                                         {activeItem.description}
                                     </p>
-                                </motion.div>
-                            </motion.div>
+                                </m.div>
+                            </m.div>
                         )}
                     </AnimatePresence>
                 </div>
             </div>
-        </motion.div>
+        </m.div>
     );
 }

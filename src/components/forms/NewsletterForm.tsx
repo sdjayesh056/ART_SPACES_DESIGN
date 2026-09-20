@@ -25,7 +25,7 @@ export function NewsletterForm() {
             <form
                 action={formAction}
                 noValidate
-                className="flex w-full md:w-auto max-w-md bg-white rounded-full p-1.5 border border-slate-200 shadow-sm hover:shadow-md focus-within:border-brand-900 focus-within:ring-1 focus-within:ring-brand-900 transition-all duration-300"
+                className="flex w-full md:w-auto max-w-md bg-white rounded-full p-1.5 border border-line shadow-sm hover:shadow-md focus-within:border-brand-900 focus-within:ring-1 focus-within:ring-brand-900 transition-all duration-300"
             >
                 <label htmlFor={emailId} className="sr-only">
                     Email address for the design newsletter
@@ -53,13 +53,13 @@ export function NewsletterForm() {
                     placeholder="Email address"
                     aria-invalid={state.status === "error" ? true : undefined}
                     aria-describedby={state.message ? statusId : undefined}
-                    className="flex-1 min-w-0 bg-transparent rounded-full px-4 md:px-5 text-slate-900 placeholder:text-slate-400 focus:outline-none text-sm font-medium"
+                    className="flex-1 min-h-11 min-w-0 bg-transparent rounded-full px-4 md:px-5 text-ink placeholder:text-ink-subtle focus:outline-none text-sm font-medium"
                 />
 
                 <button
                     type="submit"
                     disabled={isPending}
-                    className="shrink-0 inline-flex items-center gap-2 px-4 md:px-6 py-3 rounded-full bg-slate-900 text-white text-xs font-bold uppercase tracking-wider hover:bg-brand-900 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-70"
+                    className="shrink-0 inline-flex min-h-11 items-center gap-2 px-4 md:px-6 py-3 rounded-full bg-surface-inverse text-white text-xs font-bold uppercase tracking-wider hover:bg-brand-900 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-70"
                 >
                     {isPending && <Loader2 size={14} className="animate-spin" aria-hidden="true" />}
                     {isPending ? "Sending" : "Subscribe"}

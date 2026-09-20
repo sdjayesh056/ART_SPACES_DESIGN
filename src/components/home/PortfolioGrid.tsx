@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 
 import { PROJECTS, PROJECT_FILTERS } from "@/data/projects";
 import { accentAt } from "@/lib/accents";
@@ -41,7 +41,7 @@ export function PortfolioGrid() {
                             role="tab"
                             aria-selected={isActive}
                             onClick={() => setActiveFilter(filter)}
-                            className={`shrink-0 rounded-full px-6 py-3 text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
+                            className={`shrink-0 min-h-11 rounded-full px-6 py-3 text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
                                 isActive
                                     ? "bg-brand-900 text-accent-on-brand shadow-md"
                                     : "text-ink-subtle hover:bg-surface-sunken hover:text-ink"
@@ -53,22 +53,23 @@ export function PortfolioGrid() {
                 })}
             </div>
 
-            <motion.ul layout className="grid list-none grid-cols-1 gap-8 p-0 md:grid-cols-2 lg:grid-cols-3">
-                <AnimatePresence mode="popLayout">
+            {/* No `layout` prop: it was the other shared-layout animation, and the
+                fade-and-scale below already covers the filter transition. */}
+            <m.ul className="grid list-none grid-cols-1 gap-8 p-0 md:grid-cols-2 lg:grid-cols-3">
+                <AnimatePresence>
                     {visible.map((project, index) => (
-                        <motion.li
+                        <m.li
                             key={project.slug}
-                            layout
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
                             transition={{ duration: 0.3 }}
                         >
                             <ProjectCard project={project} accent={accentAt(index)} />
-                        </motion.li>
+                        </m.li>
                     ))}
                 </AnimatePresence>
-            </motion.ul>
+            </m.ul>
 
             <p role="status" aria-live="polite" className="sr-only">
                 Showing {visible.length} {visible.length === 1 ? "project" : "projects"}

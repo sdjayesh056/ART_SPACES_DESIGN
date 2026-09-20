@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion, type Variants } from "framer-motion";
+import { m, type Variants } from "framer-motion";
 
 import { fadeUp, VIEWPORT } from "@/lib/motion";
 
@@ -34,7 +34,7 @@ export function Reveal({
     className,
     as = "div",
 }: RevealProps) {
-    const MotionTag = motion[as];
+    const MotionTag = m[as];
 
     return (
         <MotionTag

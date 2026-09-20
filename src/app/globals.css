@@ -53,7 +53,14 @@
 
     --color-ink: #0f172a;
     --color-ink-muted: #475569;
-    --color-ink-subtle: #64748b;
+    /*
+        Was #64748b (slate-500). That measures 4.76:1 on white — a pass — but
+        drops to 4.34:1 on surface-sunken and 4.41:1 over the aurora tint, both
+        AA failures that axe caught on /portfolio and /portfolio/testimonials.
+        This clears 4.5:1 on every surface the token is used against: 5.42 on
+        white, 5.18 muted, 4.95 sunken, 5.02 over the tint.
+    */
+    --color-ink-subtle: #5d6b7f;
     --color-ink-inverse: #ffffff;
 
     /*
@@ -71,6 +78,12 @@
     */
     --color-danger: #dc2626;
     --color-danger-soft: #fecaca;
+
+    /*
+        Scrim for text sitting over photography. Darker than surface-inverse
+        so white copy clears AA against a bright image.
+    */
+    --color-scrim: #020617;
 
     /* ── Typography ─────────────────────────────────────────────────────── */
     --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
@@ -209,11 +222,20 @@ body {
     color: var(--color-foreground);
     font-family: var(--font-sans);
     /*
-        NOTE: this hides real overflow rather than fixing it, and it breaks
-        position:sticky in descendants. The offenders are the oversized
-        blurred background blobs; remove this once they are constrained.
+        `overflow-x: hidden` used to live here. It masked real overflow rather
+        than fixing it, and it silently breaks position:sticky in every
+        descendant — which would have bitten the first sticky sidebar or
+        table of contents anyone added.
+
+        The actual offenders are gone: the decorative blobs are constrained
+        with min(rem, vw) inside sections that clip their own overflow, and
+        the portfolio filter is a deliberate overflow-x:auto strip. Measured
+        with the rule removed at 320/375/414/768/1024/1280/1536 across the
+        home page, /portfolio, /contact, /spaces/[vertical], a project page,
+        /consultation/booking and the 404 — scrollWidth equals clientWidth
+        everywhere. If that ever changes, fix the element, do not restore
+        this rule.
     */
-    overflow-x: hidden;
 }
 
 ::-webkit-scrollbar {

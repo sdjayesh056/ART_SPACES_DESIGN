@@ -63,12 +63,12 @@ export function PageHero({
                                     {crumb.href ? (
                                         <Link
                                             href={crumb.href}
-                                            className="rounded px-1 py-2 hover:text-brand-900"
+                                            className="inline-flex min-h-11 items-center rounded px-1 hover:text-brand-900"
                                         >
                                             {crumb.label}
                                         </Link>
                                     ) : (
-                                        <span aria-current="page" className="px-1 py-2 text-ink">
+                                        <span aria-current="page" className="inline-flex min-h-11 items-center px-1 text-ink">
                                             {crumb.label}
                                         </span>
                                     )}

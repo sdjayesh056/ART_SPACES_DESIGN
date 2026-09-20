@@ -16,11 +16,11 @@ export function Footer() {
         A yearless notice is legally sufficient and can never go stale.
     */
     return (
-        <footer className="relative bg-slate-50">
+        <footer className="relative bg-surface-muted">
             {/* ═══════════════════════════════════════════════════════════ */}
             {/* CTA BANNER */}
             {/* ═══════════════════════════════════════════════════════════ */}
-            <div className="bg-slate-900 relative overflow-hidden">
+            <div className="bg-surface-inverse relative overflow-hidden">
                 <div className="absolute inset-0 opacity-20">
                     <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(45deg,var(--color-brand-900)_0%,transparent_100%)]" />
                 </div>
@@ -66,19 +66,19 @@ export function Footer() {
             {/* ═══════════════════════════════════════════════════════════ */}
             <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
                 <div className="absolute inset-0 pointer-events-none opacity-[0.4]">
-                    <div className="absolute left-1/4 top-0 bottom-0 w-px bg-slate-200" />
-                    <div className="absolute right-1/4 top-0 bottom-0 w-px bg-slate-200" />
+                    <div className="absolute left-1/4 top-0 bottom-0 w-px bg-surface-sunken" />
+                    <div className="absolute right-1/4 top-0 bottom-0 w-px bg-surface-sunken" />
                 </div>
 
                 {/* 1. NEWSLETTER STRIP */}
                 <Reveal
-                    className="py-12 border-b border-slate-200 flex flex-col md:flex-row items-center justify-between gap-8 relative z-10"
+                    className="py-12 border-b border-line flex flex-col md:flex-row items-center justify-between gap-8 relative z-10"
                 >
                     <div>
-                        <h2 className="text-xl font-extrabold text-slate-900 mb-1 tracking-tight">
+                        <h2 className="text-xl font-extrabold text-ink mb-1 tracking-tight">
                             Join Our Design Newsletter
                         </h2>
-                        <p className="text-slate-600 text-sm font-medium">
+                        <p className="text-ink-muted text-sm font-medium">
                             Curated architectural trends delivered to your inbox.
                         </p>
                     </div>
@@ -86,7 +86,7 @@ export function Footer() {
                 </Reveal>
 
                 {/* 2. MAIN GRID */}
-                <div className="py-16 grid grid-cols-1 lg:grid-cols-12 gap-12 border-b border-slate-200 relative z-10">
+                <div className="py-16 grid grid-cols-1 lg:grid-cols-12 gap-12 border-b border-line relative z-10">
                     {/* Brand Column */}
                     <div className="lg:col-span-4 lg:pr-12">
                         <Link href="/" className="inline-flex items-center mb-8">
@@ -105,7 +105,7 @@ export function Footer() {
                                 className="w-56 h-20"
                             />
                         </Link>
-                        <p className="text-slate-700 text-sm font-medium leading-7 mb-8">
+                        <p className="text-ink-muted text-sm font-medium leading-7 mb-8">
                             A forward-thinking design studio reimagining residential and commercial
                             spaces through structure, light, and material innovation.
                         </p>
@@ -115,7 +115,7 @@ export function Footer() {
                                     <a
                                         href={social.href}
                                         aria-label={social.label}
-                                        className="w-11 h-11 flex items-center justify-center rounded-full bg-white border border-slate-200 text-slate-600 shadow-sm hover:border-brand-900 hover:bg-brand-900 hover:text-white transition-all duration-300 hover:-translate-y-0.5 hover:scale-110"
+                                        className="w-11 h-11 flex items-center justify-center rounded-full bg-white border border-line text-ink-muted shadow-sm hover:border-brand-900 hover:bg-brand-900 hover:text-white transition-all duration-300 hover:-translate-y-0.5 hover:scale-110"
                                     >
                                         <social.icon className="w-4 h-4" aria-hidden="true" />
                                     </a>
@@ -131,10 +131,10 @@ export function Footer() {
                                 key={column.heading}
                                 as="div"
                                 delay={0.1 * (columnIndex + 1)}
-                                className="md:px-8 md:border-l border-slate-200"
+                                className="md:px-8 md:border-l border-line"
                             >
                                 <nav aria-label={column.heading}>
-                                <h2 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-8 flex items-center gap-2">
+                                <h2 className="text-xs font-black text-ink uppercase tracking-widest mb-8 flex items-center gap-2">
                                     <span className="w-2 h-0.5 bg-brand-900 rounded-full" />
                                     {column.heading}
                                 </h2>
@@ -143,9 +143,9 @@ export function Footer() {
                                         <li key={link.href}>
                                             <Link
                                                 href={link.href}
-                                                className="py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-all flex items-center gap-2 group"
+                                                className="min-h-11 py-2 text-sm font-semibold text-ink-muted hover:text-ink transition-all flex items-center gap-2 group"
                                             >
-                                                <span className="w-1 h-1 bg-slate-300 rounded-full group-hover:bg-brand-900 group-hover:scale-150 transition-all duration-300" />
+                                                <span className="w-1 h-1 bg-line-strong rounded-full group-hover:bg-brand-900 group-hover:scale-150 transition-all duration-300" />
                                                 {link.label}
                                             </Link>
                                         </li>
@@ -156,14 +156,14 @@ export function Footer() {
                         ))}
 
                         {/* Studio contact */}
-                        <Reveal delay={0.3} className="md:px-8 md:border-l border-slate-200">
-                            <h2 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-8 flex items-center gap-2">
+                        <Reveal delay={0.3} className="md:px-8 md:border-l border-line">
+                            <h2 className="text-xs font-black text-ink uppercase tracking-widest mb-8 flex items-center gap-2">
                                 <span className="w-2 h-0.5 bg-brand-900 rounded-full" />
                                 Studio
                             </h2>
                             <ul className="space-y-2">
-                                <li className="flex items-start gap-3 text-sm font-semibold text-slate-600 mb-4">
-                                    <span className="w-8 h-8 shrink-0 rounded-lg bg-white border border-slate-100 flex items-center justify-center text-brand-900 shadow-sm">
+                                <li className="flex items-start gap-3 text-sm font-semibold text-ink-muted mb-4">
+                                    <span className="w-8 h-8 shrink-0 rounded-lg bg-white border border-line flex items-center justify-center text-brand-900 shadow-sm">
                                         <MapPin className="w-4 h-4" aria-hidden="true" />
                                     </span>
                                     <address className="not-italic mt-1">
@@ -175,9 +175,9 @@ export function Footer() {
                                 <li>
                                     <a
                                         href={STUDIO.phone.href}
-                                        className="py-2 flex items-center gap-3 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors group"
+                                        className="min-h-11 py-2 flex items-center gap-3 text-sm font-semibold text-ink-muted hover:text-ink transition-colors group"
                                     >
-                                        <span className="w-8 h-8 shrink-0 rounded-lg bg-white border border-slate-100 flex items-center justify-center text-brand-900 shadow-sm group-hover:scale-110 transition-transform">
+                                        <span className="w-8 h-8 shrink-0 rounded-lg bg-white border border-line flex items-center justify-center text-brand-900 shadow-sm group-hover:scale-110 transition-transform">
                                             <Phone className="w-4 h-4" aria-hidden="true" />
                                         </span>
                                         {STUDIO.phone.display}
@@ -186,9 +186,9 @@ export function Footer() {
                                 <li>
                                     <a
                                         href={STUDIO.email.href}
-                                        className="py-2 flex items-center gap-3 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors group"
+                                        className="min-h-11 py-2 flex items-center gap-3 text-sm font-semibold text-ink-muted hover:text-ink transition-colors group"
                                     >
-                                        <span className="w-8 h-8 shrink-0 rounded-lg bg-white border border-slate-100 flex items-center justify-center text-brand-900 shadow-sm group-hover:scale-110 transition-transform">
+                                        <span className="w-8 h-8 shrink-0 rounded-lg bg-white border border-line flex items-center justify-center text-brand-900 shadow-sm group-hover:scale-110 transition-transform">
                                             <Mail className="w-4 h-4" aria-hidden="true" />
                                         </span>
                                         {STUDIO.email.display}
@@ -201,7 +201,7 @@ export function Footer() {
 
                 {/* 3. BOTTOM BAR */}
                 <div className="py-8 flex flex-col md:flex-row items-center justify-between gap-4 relative z-10">
-                    <p className="text-xs text-slate-600 font-bold">
+                    <p className="text-xs text-ink-muted font-bold">
                         © {STUDIO.name}. All rights reserved.
                     </p>
                     <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 list-none p-0">
@@ -209,7 +209,7 @@ export function Footer() {
                             <li key={link.label}>
                                 <Link
                                     href={link.href}
-                                    className="py-2 inline-block text-xs text-slate-600 hover:text-brand-900 transition-all uppercase tracking-wider font-bold relative group"
+                                    className="inline-flex min-h-11 items-center text-xs text-ink-muted hover:text-brand-900 transition-all uppercase tracking-wider font-bold relative group"
                                 >
                                     {link.label}
                                     <span className="absolute bottom-1 left-0 w-0 h-0.5 bg-brand-900 group-hover:w-full transition-all duration-300" />

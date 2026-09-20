@@ -52,6 +52,7 @@ export default function TestimonialsPage() {
                 <article className="flex h-full flex-col rounded-panel border border-line bg-surface p-8 shadow-card">
                   <p
                     className="mb-4 flex items-center gap-1"
+                    role="img"
                     aria-label={`Rated ${testimonial.rating} out of 5`}
                   >
                     {Array.from({ length: testimonial.rating }).map((_, star) => (

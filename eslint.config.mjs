@@ -1,6 +1,7 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
+import jsxA11y from "eslint-plugin-jsx-a11y";
 
 /*
   Colour guardrails.
@@ -43,6 +44,21 @@ const colourRules = [
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+
+  /*
+    The full jsx-a11y recommended set. eslint-config-next enables only a
+    handful of these, which is how a prohibited aria-label on a <p>, unlabelled
+    icon links and a hover-only disclosure all shipped. Static analysis will
+    not catch contrast or focus order — run axe against a built site for
+    those — but it catches the structural mistakes at commit time, in the CI
+    that already exists, with no headless browser to maintain.
+  */
+  {
+    files: ["src/**/*.tsx"],
+    // Rules only, not the plugin: eslint-config-next already registers
+    // "jsx-a11y", and re-registering it is a hard config error.
+    rules: { ...jsxA11y.flatConfigs.recommended.rules },
+  },
 
   {
     files: ["src/components/**/*.tsx", "src/app/**/*.tsx"],

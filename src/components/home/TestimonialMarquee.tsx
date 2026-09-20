@@ -52,7 +52,7 @@ export function TestimonialMarquee() {
                     type="button"
                     onClick={() => setPaused((value) => !value)}
                     aria-pressed={paused}
-                    className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-5 py-3 text-xs font-bold uppercase tracking-wider text-ink-muted shadow-sm transition-colors hover:border-brand-900 hover:text-brand-900"
+                    className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-surface px-5 py-3 text-xs font-bold uppercase tracking-wider text-ink-muted shadow-sm transition-colors hover:border-brand-900 hover:text-brand-900"
                 >
                     {paused ? (
                         <Play className="h-3.5 w-3.5" aria-hidden="true" />
@@ -78,7 +78,7 @@ function TestimonialCard({ testimonial, accent }: { testimonial: Testimonial; ac
 
             <div className="grow">
                 {/* The stars were decorative only — invisible to assistive tech and crawlers. */}
-                <p className="mb-4 flex items-center gap-1" aria-label={`Rated ${testimonial.rating} out of 5`}>
+                <p className="mb-4 flex items-center gap-1" role="img" aria-label={`Rated ${testimonial.rating} out of 5`}>
                     {Array.from({ length: testimonial.rating }).map((_, index) => (
                         <Star
                             key={index}

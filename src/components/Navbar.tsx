@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 
 import { MegaMenu } from "./MegaMenu";
@@ -132,7 +132,7 @@ export function Navbar() {
 
     return (
         <>
-            <motion.nav
+            <m.nav
                 initial={reduceMotion ? false : { y: -40, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -147,7 +147,7 @@ export function Navbar() {
                 w-full max-w-7xl
                 rounded-full p-1.5
                 border border-white/10
-                bg-slate-200
+                bg-surface-sunken
                 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.1)]
                 transition-all duration-500
                 ${scrolled ? "max-w-4xl" : ""}
@@ -158,7 +158,7 @@ export function Navbar() {
                     {/* ========== LEFT : Brand ========== */}
                     <Link
                         href="/"
-                        className="relative z-10 flex min-w-0 items-center pl-2 pr-2 md:pl-4 md:pr-6 rounded-full hover:bg-black/5 transition"
+                        className="relative z-10 flex min-h-11 min-w-0 items-center pl-2 pr-2 md:pl-4 md:pr-6 rounded-full hover:bg-black/5 transition"
                     >
                         <Image
                             src="/Logos/ART_SPACES_DESIGN_LOGO.png"
@@ -218,21 +218,27 @@ export function Navbar() {
                                     aria-expanded={isActive}
                                     aria-haspopup="true"
                                     aria-controls={PANEL_ID}
+                                    /*
+                                        Plain CSS rather than a shared-layout
+                                        `layoutId` pill. That was the only
+                                        layout animation left in the app, and
+                                        dropping it lets LazyMotion load
+                                        `domAnimation` instead of `domMax` —
+                                        roughly 12 KB less on every route,
+                                        for a slide most visitors never see.
+                                    */
                                     className={`
                         relative z-10 px-5 py-2 rounded-full cursor-pointer
                         text-xs font-semibold uppercase tracking-wider
-                        transition-colors
-                        ${isActive ? "text-accent-on-brand" : "text-brand-900"}
+                        transition-colors duration-300
+                        ${
+                            isActive
+                                ? "bg-brand-900 text-accent-on-brand shadow-sm"
+                                : "text-brand-900 hover:bg-black/5"
+                        }
                     `}
                                 >
-                                    {isActive && (
-                                        <motion.span
-                                            layoutId="nav-pill"
-                                            className="absolute inset-0 rounded-full bg-brand-900 shadow-sm"
-                                            transition={{ type: "spring", stiffness: 260, damping: 22 }}
-                                        />
-                                    )}
-                                    <span className="relative z-10">{item.label}</span>
+                                    {item.label}
                                 </button>
                             );
                         })}
@@ -274,7 +280,7 @@ export function Navbar() {
                     <div className="absolute top-full inset-x-0 pt-4 flex justify-center pointer-events-none">
                         <AnimatePresence>
                             {activeSection && (
-                                <motion.div
+                                <m.div
                                     key={activeMenu}
                                     id={PANEL_ID}
                                     initial={{ opacity: 0, y: -12, scale: 0.96 }}
@@ -286,12 +292,12 @@ export function Navbar() {
                                     className="pointer-events-auto w-[92vw] max-w-5xl"
                                 >
                                     <MegaMenu title={activeSection.title} items={activeSection.items} />
-                                </motion.div>
+                                </m.div>
                             )}
                         </AnimatePresence>
                     </div>
                 </div>
-            </motion.nav>
+            </m.nav>
 
             <MobileNav isOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
         </>

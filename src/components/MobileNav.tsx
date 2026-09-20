@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { ArrowRight, ChevronDown, X } from "lucide-react";
 
 import { menuData, NAV_ITEMS, PRIMARY_CTA } from "@/data/navigation";
@@ -98,13 +98,13 @@ export function MobileNav({ isOpen, onClose }: MobileNavProps) {
             {isOpen && (
                 <>
                     {/* Explicit keys so AnimatePresence tracks each child's exit. */}
-                    <motion.div
+                    <m.div
                         key="mobile-nav-backdrop"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="fixed inset-0 z-[60] bg-slate-900/60 backdrop-blur-2xl"
+                        className="fixed inset-0 z-[60] bg-surface-inverse/60 backdrop-blur-2xl"
                         onClick={onClose}
                     />
                     <MobileNavPanel key="mobile-nav-panel" onClose={onClose} />
@@ -166,7 +166,7 @@ function MobileNavPanel({ onClose }: { onClose: () => void }) {
     };
 
     return (
-        <motion.div
+        <m.div
             ref={panelRef}
             id="mobile-navigation"
             role="dialog"
@@ -177,10 +177,10 @@ function MobileNavPanel({ onClose }: { onClose: () => void }) {
             animate="open"
             exit="closed"
             variants={menuVariants}
-            className="fixed inset-0 z-[70] bg-slate-900 text-white overflow-y-auto"
+            className="fixed inset-0 z-[70] bg-surface-inverse text-white overflow-y-auto"
         >
             {/* Header */}
-            <div className="sticky top-0 z-10 flex items-center justify-between p-4 bg-slate-900/95 backdrop-blur-sm border-b border-white/10">
+            <div className="sticky top-0 z-10 flex items-center justify-between p-4 bg-surface-inverse/95 backdrop-blur-sm border-b border-white/10">
                 <div className="flex items-center">
                     <Image
                         src="/Logos/ART_SPACES_DESIGN_LOGO.png"
@@ -210,9 +210,9 @@ function MobileNavPanel({ onClose }: { onClose: () => void }) {
 
             {/* Navigation Links */}
             <div className="px-4 py-6">
-                <motion.div variants={containerVariants} className="space-y-2">
+                <m.div variants={containerVariants} className="space-y-2">
                     {MENU_SECTIONS.map((section, index) => (
-                        <motion.div
+                        <m.div
                             key={section.key}
                             variants={itemVariants}
                             className="border-b border-white/10"
@@ -232,17 +232,17 @@ function MobileNavPanel({ onClose }: { onClose: () => void }) {
                                         {section.label}
                                     </span>
                                 </span>
-                                <motion.span
+                                <m.span
                                     animate={{ rotate: expandedSection === section.key ? 180 : 0 }}
                                     transition={{ duration: 0.3 }}
                                 >
                                     <ChevronDown className="w-6 h-6 text-white/70" aria-hidden="true" />
-                                </motion.span>
+                                </m.span>
                             </button>
 
                             <AnimatePresence>
                                 {expandedSection === section.key && (
-                                    <motion.div
+                                    <m.div
                                         id={`mobile-section-${section.key}`}
                                         initial="closed"
                                         animate="open"
@@ -283,15 +283,15 @@ function MobileNavPanel({ onClose }: { onClose: () => void }) {
                                                 </Link>
                                             ))}
                                         </div>
-                                    </motion.div>
+                                    </m.div>
                                 )}
                             </AnimatePresence>
-                        </motion.div>
+                        </m.div>
                     ))}
 
                     {/* Flat entries — the same set the desktop nav shows. */}
                     {FLAT_ITEMS.map((item, index) => (
-                        <motion.div key={item.href} variants={itemVariants}>
+                        <m.div key={item.href} variants={itemVariants}>
                             <Link
                                 href={item.href}
                                 onClick={onClose}
@@ -310,17 +310,17 @@ function MobileNavPanel({ onClose }: { onClose: () => void }) {
                                     aria-hidden="true"
                                 />
                             </Link>
-                        </motion.div>
+                        </m.div>
                     ))}
-                </motion.div>
+                </m.div>
             </div>
 
             {/* Footer */}
-            <motion.div
+            <m.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}
-                className="sticky bottom-0 bg-slate-900/95 backdrop-blur-sm border-t border-white/10 p-4"
+                className="sticky bottom-0 bg-surface-inverse/95 backdrop-blur-sm border-t border-white/10 p-4"
             >
                 <div className="flex flex-col gap-4">
                     <Link
@@ -351,7 +351,7 @@ function MobileNavPanel({ onClose }: { onClose: () => void }) {
                         </ul>
                     </div>
                 </div>
-            </motion.div>
-        </motion.div>
+            </m.div>
+        </m.div>
     );
 }

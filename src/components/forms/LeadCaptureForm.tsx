@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useActionState, useId } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { ArrowRight, CheckCircle2, ChevronDown, Loader2, Mail, MessageSquare, Smartphone, User } from "lucide-react";
 
 import { submitLead } from "@/actions/lead";
@@ -9,11 +9,11 @@ import { SERVICE_OPTIONS } from "@/data/lead-services";
 import { HONEYPOT_FIELD, initialLeadFormState, type LeadFormState } from "@/types/lead";
 
 const INPUT_CLASS =
-    "w-full bg-slate-200 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-slate-900 placeholder-slate-400 font-medium transition-all focus:outline-none focus:border-accent-400 focus:ring-2 focus:ring-accent-400/50 focus:bg-white";
+    "w-full bg-surface-sunken border border-white/10 rounded-xl py-4 pl-12 pr-4 text-ink placeholder-ink-subtle font-medium transition-all focus:outline-none focus:border-accent-400 focus:ring-2 focus:ring-accent-400/50 focus:bg-white";
 
-const LABEL_CLASS = "block text-sm font-medium text-slate-200 mb-2 ml-1";
+const LABEL_CLASS = "block text-sm font-medium text-ink-inverse/85 mb-2 ml-1";
 
-const ICON_CLASS = "absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none";
+const ICON_CLASS = "absolute left-4 top-1/2 -translate-y-1/2 text-ink-subtle pointer-events-none";
 
 export function LeadCaptureForm() {
     const [state, formAction, isPending] = useActionState(submitLead, initialLeadFormState);
@@ -30,7 +30,7 @@ export function LeadCaptureForm() {
         <form action={formAction} className="space-y-5" noValidate>
             <div>
                 <h3 className="text-2xl font-bold text-white mb-2">Get Your Free Quote</h3>
-                <p className="text-slate-200 text-sm">
+                <p className="text-ink-inverse/85 text-sm">
                     Fill out the form below and we&apos;ll get back to you within 24 hours.
                 </p>
             </div>
@@ -163,7 +163,7 @@ export function LeadCaptureForm() {
                 optional
                 errors={state.fieldErrors?.message}
             >
-                <MessageSquare size={18} className="absolute left-4 top-4 text-slate-500 pointer-events-none" aria-hidden="true" />
+                <MessageSquare size={18} className="absolute left-4 top-4 text-ink-subtle pointer-events-none" aria-hidden="true" />
                 <textarea
                     id={id("message")}
                     name="message"
@@ -177,7 +177,7 @@ export function LeadCaptureForm() {
                 />
             </Field>
 
-            <motion.button
+            <m.button
                 type="submit"
                 disabled={isPending}
                 whileHover={isPending ? undefined : { scale: 1.02 }}
@@ -195,14 +195,14 @@ export function LeadCaptureForm() {
                         <ArrowRight size={20} aria-hidden="true" />
                     </>
                 )}
-            </motion.button>
+            </m.button>
 
             {/* Announces the pending state to screen readers without stealing focus. */}
             <p className="sr-only" role="status" aria-live="polite">
                 {isPending ? "Sending your enquiry" : ""}
             </p>
 
-            <p className="text-xs text-center text-slate-300/80 mt-4">
+            <p className="text-xs text-center text-ink-inverse/75 mt-4">
                 By submitting, you agree to our privacy policy. Your data is secure.
             </p>
         </form>
@@ -223,7 +223,7 @@ function Field({ id, errorId, label, optional, errors, children }: FieldProps) {
         <div>
             <label htmlFor={id} className={LABEL_CLASS}>
                 {label}
-                {optional && <span className="text-slate-300/70 font-normal"> (optional)</span>}
+                {optional && <span className="text-ink-inverse/70 font-normal"> (optional)</span>}
             </label>
             <div className="relative">{children}</div>
             {errors && errors.length > 0 && (
@@ -237,7 +237,7 @@ function Field({ id, errorId, label, optional, errors, children }: FieldProps) {
 
 function SuccessPanel({ message }: { message: LeadFormState["message"] }) {
     return (
-        <motion.div
+        <m.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
@@ -249,7 +249,7 @@ function SuccessPanel({ message }: { message: LeadFormState["message"] }) {
                 <CheckCircle2 size={32} className="text-accent-300" aria-hidden="true" />
             </div>
             <h3 className="text-2xl font-bold text-white mb-3">Enquiry received</h3>
-            <p className="text-slate-100 leading-relaxed max-w-sm">{message}</p>
-        </motion.div>
+            <p className="text-ink-inverse leading-relaxed max-w-sm">{message}</p>
+        </m.div>
     );
 }
