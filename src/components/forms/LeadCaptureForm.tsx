@@ -132,6 +132,16 @@ export function LeadCaptureForm() {
                 <select
                     id={id("service")}
                     name="service"
+                    /*
+                        Keyed on the echoed value so a failed submit remounts
+                        it. React applies an uncontrolled <select>'s
+                        defaultValue by marking an option selected at mount
+                        only; on re-render the attribute is not refreshed, so
+                        the post-action form.reset() restored the original
+                        empty option and silently dropped the visitor's choice.
+                        Inputs and textareas do not have this problem.
+                    */
+                    key={`service-${state.values?.service ?? ""}`}
                     defaultValue={state.values?.service ?? ""}
                     aria-invalid={state.fieldErrors?.service ? true : undefined}
                     aria-describedby={state.fieldErrors?.service ? errorId("service") : undefined}

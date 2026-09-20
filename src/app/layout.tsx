@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import { MotionProvider } from "@/components/providers/MotionProvider";
 
 /*
@@ -23,10 +21,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  // TODO(phase-5): full SEO pass — metadataBase, openGraph, twitter,
-  // canonical, sitemap.ts, robots.ts and ProfessionalService JSON-LD.
-  // The previous copy here was unreplaced scaffold from the project's
-  // art-marketplace origin and described a different product entirely.
+  // TODO(seo): metadataBase, openGraph, twitter, canonical, sitemap.ts,
+  // robots.ts and ProfessionalService JSON-LD still outstanding — the last
+  // needs the real NAP, which is still a placeholder in src/data/studio.ts.
   title: {
     default: "ArtSpaces Design | Luxury Interior Design Studio in Mumbai",
     template: "%s | ArtSpaces Design",
@@ -35,6 +32,11 @@ export const metadata: Metadata = {
     "ArtSpaces Design is a Mumbai-based interior and architectural design studio creating residential, commercial, hospitality and retail spaces across India. Book a free consultation.",
 };
 
+/**
+ * Root layout owns only the document and app-wide providers. The site chrome
+ * (navbar, main, footer) belongs to the (marketing) route group, so a future
+ * route outside it — an auth or admin screen — can opt out of it entirely.
+ */
 export default function RootLayout({
   children,
 }: {
@@ -45,24 +47,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <MotionProvider>
-          {/* First focusable element, so keyboard users can skip the navbar. */}
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-brand-900 focus:px-5 focus:py-3 focus:text-sm focus:font-bold focus:text-accent-on-brand"
-          >
-            Skip to main content
-          </a>
-
-          {/* The nav had no <header>, so the document carried no banner landmark. */}
-          <header>
-            <Navbar />
-          </header>
-
-          <main id="main-content">{children}</main>
-
-          <Footer />
-        </MotionProvider>
+        <MotionProvider>{children}</MotionProvider>
       </body>
     </html>
   );

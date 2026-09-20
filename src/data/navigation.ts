@@ -24,14 +24,34 @@ import type { FooterColumn, MenuKey, MenuSection, NavItem } from "@/types/naviga
  * is already the house pattern in services/stats/socials. That keeps this
  * importable from Server Components.
  *
- * ROUTE STATUS: only "/" exists today. Every entry below is therefore still a
- * 404 — they are kept because the navigation is the product spec for Phase 3,
- * and `LIVE_ROUTES` records what has actually been built so sitemap.ts never
- * advertises a page that does not exist.
+ * ROUTE STATUS: every route below now resolves. `LIVE_ROUTES` records which
+ * ones exist so sitemap.ts can never advertise a page that does not — keep it
+ * in step when adding or removing a route.
  */
 
-/** Routes that actually resolve. Add to this as Phase 3 builds each page. */
-export const LIVE_ROUTES = new Set<string>(["/"]);
+/** Routes that actually resolve. /privacy and /terms are noindex until their text is reviewed. */
+export const LIVE_ROUTES = new Set<string>([
+    "/",
+    "/about",
+    "/careers",
+    "/contact",
+    "/consultation",
+    "/consultation/booking",
+    "/consultation/process",
+    "/consultation/team",
+    "/consultation/virtual-tours",
+    "/portfolio",
+    "/portfolio/awards",
+    "/portfolio/styles",
+    "/portfolio/testimonials",
+    "/privacy",
+    "/spaces",
+    "/spaces/commercial",
+    "/spaces/hospitality",
+    "/spaces/residential",
+    "/spaces/retail",
+    "/terms",
+]);
 
 export function isLiveRoute(href: string): boolean {
     return LIVE_ROUTES.has(href);
