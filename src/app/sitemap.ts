@@ -1,7 +1,9 @@
 import type { MetadataRoute } from "next";
 
 import { LIVE_ROUTES } from "@/data/navigation";
+import { ARTICLES } from "@/data/journal";
 import { PROJECTS } from "@/data/projects";
+import { SERVICES } from "@/data/services";
 import { absoluteUrl, NOINDEX_ROUTES } from "@/lib/seo";
 
 /**
@@ -17,7 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const priorityFor = (route: string) => {
         if (route === "/") return 1;
         if (route === "/contact" || route === "/consultation/booking") return 0.9;
-        if (route === "/portfolio" || route.startsWith("/spaces/")) return 0.8;
+        if (route === "/portfolio" || route === "/services" || route.startsWith("/spaces/")) return 0.8;
         return 0.6;
     };
 
@@ -36,5 +38,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 0.7,
     }));
 
-    return [...staticRoutes, ...projectRoutes];
+    const serviceRoutes = SERVICES.map((service) => ({
+    url: absoluteUrl(`/services/${service.slug}`),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
+  const articleRoutes = ARTICLES.map((article) => ({
+    url: absoluteUrl(`/journal/${article.slug}`),
+    changeFrequency: "monthly" as const,
+    priority: 0.5,
+  }));
+
+  return [...staticRoutes, ...serviceRoutes, ...projectRoutes, ...articleRoutes];
 }

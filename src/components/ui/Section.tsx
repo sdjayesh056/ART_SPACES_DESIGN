@@ -41,7 +41,7 @@ export function Section({
         <section
             id={id}
             aria-labelledby={labelledBy}
-            className={`relative overflow-hidden py-20 md:py-28 ${SURFACES[surface]} ${className}`}
+            className={`relative overflow-clip py-20 md:py-28 ${SURFACES[surface]} ${className}`}
         >
             {background === "aurora" && <AuroraBackground tone={tone} />}
             <div className="relative z-10">{children}</div>

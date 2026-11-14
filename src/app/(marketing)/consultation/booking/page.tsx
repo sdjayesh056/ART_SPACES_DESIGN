@@ -1,35 +1,30 @@
 import type { Metadata } from "next";
-import { Calendar, CheckCircle } from "lucide-react";
+import Link from "next/link";
 
-import { LeadCaptureForm } from "@/components/forms/LeadCaptureForm";
+import { AsideCard, EnquiryPanel } from "@/components/sections/Blocks";
+import { NextSteps, StudioFacts } from "@/components/sections/Enquiry";
+import { FaqAccordion } from "@/components/sections/FaqAccordion";
 import { Container } from "@/components/ui/Container";
 import { PageHero } from "@/components/ui/PageHero";
 import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
+import { BOOKING_FAQS } from "@/data/faq";
 
 export const metadata: Metadata = {
-  alternates: { canonical: "/consultation/booking" },
-  title: "Book a Free Consultation",
+  title: "Book a Free Interior Design Consultation",
   description:
-    "Book a free interior design consultation with ArtSpaces Design, Mumbai. Tell us about your space and we will reply within 24 hours.",
+    "Book a free 45-minute interior design consultation with ArtSpaces Design, Mumbai. Tell us about your space and a designer replies within one working day.",
+  alternates: { canonical: "/consultation/booking" },
 };
-
-const WHAT_HAPPENS = [
-  "We read your brief and come back within one working day",
-  "A 45-minute call or studio visit, at no cost",
-  "An honest view of scope, timeline and budget range",
-  "A written proposal only if it is a good fit both ways",
-];
 
 export default function BookingPage() {
   return (
     <>
       <PageHero
         eyebrow="Booking"
-        eyebrowIcon={Calendar}
         title="Book a free"
         highlight="consultation"
-        lede="No cost, no obligation. Tell us what you are planning and we will come back within 24 hours."
+        lede="No cost, no obligation. Tell us what you are planning and a designer will reply within one working day."
         breadcrumbs={[
           { label: "Home", href: "/" },
           { label: "Consultation", href: "/consultation" },
@@ -38,34 +33,24 @@ export default function BookingPage() {
       />
 
       <Section labelledBy="booking-heading">
-        <Container>
+        <Container size="wide">
           <h2 id="booking-heading" className="sr-only">
             Consultation request
           </h2>
-
-          <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
-            <Reveal>
-              <h3 className="text-2xl font-bold text-ink">What happens next</h3>
-              <ul className="mt-8 list-none space-y-5 p-0">
-                {WHAT_HAPPENS.map((step) => (
-                  <li key={step} className="flex items-start gap-3 text-ink-muted">
-                    <span className="mt-0.5 rounded-full bg-brand-50 p-1 text-brand-900">
-                      <CheckCircle size={16} aria-hidden="true" />
-                    </span>
-                    {step}
-                  </li>
-                ))}
-              </ul>
+          <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+            <Reveal className="order-2 space-y-6 lg:order-1">
+              <NextSteps />
+              <StudioFacts />
+              <AsideCard title="Before you ask">
+                <FaqAccordion items={BOOKING_FAQS} level="h4" />
+                <Link href="/faq" className="mt-4 inline-flex min-h-11 items-center font-semibold text-brand-900 underline underline-offset-4">
+                  Read all frequently asked questions
+                </Link>
+              </AsideCard>
             </Reveal>
-
-            <Reveal delay={0.1}>
-              <div
-                id="lead-form"
-                className="rounded-panel bg-gradient-to-br from-brand-900 via-brand-800 to-brand-500 p-8 shadow-2xl md:p-10"
-              >
-                <LeadCaptureForm />
-              </div>
-            </Reveal>
+            <div className="order-1 lg:sticky lg:top-28 lg:order-2 lg:self-start">
+              <EnquiryPanel />
+            </div>
           </div>
         </Container>
       </Section>

@@ -1,93 +1,118 @@
 import type { Metadata } from "next";
-import { Sparkles } from "lucide-react";
+import { Briefcase, ClipboardList, Users } from "lucide-react";
 
-import { StatsSection } from "@/components/home/StatsSection";
+import { RoomIllustration } from "@/components/illustrations";
+import { StatBand } from "@/components/sections/Blocks";
+import { CtaBand } from "@/components/sections/CtaBand";
+import { AsideQuote } from "@/components/sections/HeroAsides";
+import { DarkBand, GlassCards, Heading, Tiles, TypeIndex } from "@/components/sections/kit";
 import { Container } from "@/components/ui/Container";
 import { CtaButton } from "@/components/ui/CtaButton";
 import { PageHero } from "@/components/ui/PageHero";
 import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
+import { HERO_PHOTO } from "@/data/photos";
 import { STUDIO } from "@/data/studio";
+import { STORY, VALUES } from "@/data/studio-content";
 
 export const metadata: Metadata = {
-  alternates: { canonical: "/about" },
-  title: "About the Studio",
+  title: "About Our Mumbai Interior Design Studio",
   description:
-    "ArtSpaces Design is an interior and architectural design studio in Mumbai working on residential, commercial, hospitality and retail spaces across India.",
+    "ArtSpaces Design is a Mumbai interior design studio that designs and builds homes, workplaces, hotels and stores, with one team from first sketch to handover.",
+  alternates: { canonical: "/about" },
 };
 
+const MORE = [
+  { title: "Meet the team", description: "The roles behind every project, and how a team is formed.", href: "/consultation/team", icon: Users },
+  { title: "How we work", description: "Seven phases, from the first consultation to handover.", href: "/consultation/process", icon: ClipboardList },
+  { title: "Careers", description: "Join a studio where designers see their drawings built.", href: "/careers", icon: Briefcase },
+];
+
 export default function AboutPage() {
+  const [lead, ...rest] = STORY;
+
   return (
     <>
       <PageHero
-        eyebrow="Studio"
-        eyebrowIcon={Sparkles}
-        title="A design studio in"
-        highlight={STUDIO.address.locality}
-        lede="We work on residential, commercial, hospitality and retail interiors — shaping them through structure, light and material rather than decoration."
+        image={HERO_PHOTO}
+        imageAlt="A contemporary living space designed by ArtSpaces, with layered lighting and natural materials"
+        eyebrow="About the studio"
+        title="One studio, from"
+        highlight="first sketch to handover"
+        lede={STUDIO.tagline}
+        stats
+        aside={<AsideQuote quote="The designer who draws your home is in the room when the carpenter builds it." source="How every project runs" />}
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "About" }]}
       >
-        <CtaButton href="/contact">Talk to the studio</CtaButton>
+        <CtaButton href="/consultation/booking" variant="inverse">
+          Book a free consultation
+        </CtaButton>
       </PageHero>
 
-      <Section labelledBy="about-heading">
-        <Container>
-          <div className="mx-auto max-w-2xl">
-            <h2 id="about-heading" className="text-section font-bold text-balance text-ink">
-              How we work
-            </h2>
-
-            <Reveal delay={0.05}>
-              <p className="mt-8 text-lg leading-relaxed text-ink-muted">
-                A forward-thinking design studio reimagining residential and commercial
-                spaces through structure, light, and material innovation. Every project
-                starts with the same question — how will this room actually be used, at
-                what time of day, by whom — and the drawings follow from the answer.
-              </p>
-            </Reveal>
-
-            <Reveal delay={0.1}>
-              <p className="mt-6 text-lg leading-relaxed text-ink-muted">
-                We work across {STUDIO.servedCities.join(", ")} and take on projects
-                elsewhere when the brief is right.
-              </p>
-            </Reveal>
-
-            {/*
-              Placeholder. Phase 4 replaces this with the studio's real story:
-              founding, people, philosophy, notable clients.
-            */}
-            <Reveal delay={0.15}>
-              <p className="mt-6 text-ink-subtle">
-                A fuller account of the studio — how it started, who is behind it and
-                what we will not compromise on — is being written.
-              </p>
-            </Reveal>
-          </div>
-        </Container>
-      </Section>
-
-      {/* Reuses the home page stats block — one source, rendered twice. */}
-      <StatsSection />
-
-      <Section labelledBy="about-cta-heading">
-        <Container>
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 id="about-cta-heading" className="text-section font-bold text-balance text-ink">
-              Let&apos;s design something together
-            </h2>
-            <p className="mt-6 text-lg text-ink-muted">
-              The first consultation is free and carries no obligation.
-            </p>
-            <div className="mt-10 flex flex-wrap justify-center gap-4">
-              <CtaButton href="/consultation/booking">Book a consultation</CtaButton>
-              <CtaButton href="/portfolio" variant="secondary">
-                See our work
-              </CtaButton>
+      <Section surface="muted" labelledBy="about-story-heading">
+        <Container size="wide">
+          <div className="grid items-center gap-14 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
+            <div>
+              <Heading id="about-story-heading" eyebrow="01 — Our story" title="We design the room," highlight="then we build it" />
+              <Reveal delay={0.1}>
+                <p className="mt-8 text-2xl font-medium leading-snug tracking-tight text-pretty text-ink">{lead}</p>
+                <div className="mt-6 space-y-5 text-lg leading-relaxed text-pretty text-ink-muted">
+                  {rest.map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
+                </div>
+              </Reveal>
             </div>
+            <Reveal delay={0.1}>
+              <figure className="relative">
+                <div aria-hidden="true" className="absolute inset-x-[12%] bottom-0 top-[20%] rounded-full bg-brand-200/60 blur-[90px]" />
+                <RoomIllustration className="relative" title="Isometric illustration of a furnished living room with sofa, rug, window, pendants and planting" />
+              </figure>
+            </Reveal>
           </div>
         </Container>
       </Section>
+
+      <DarkBand labelledBy="about-values-heading">
+        <Container size="wide">
+          <Heading
+            id="about-values-heading"
+            tone="inverse"
+            eyebrow="02 — Philosophy"
+            title="Four things"
+            highlight="we will not compromise on"
+            className="mb-14"
+          />
+          <GlassCards items={VALUES} />
+        </Container>
+      </DarkBand>
+
+      <StatBand id="about-stats-heading" title="The studio in numbers" />
+
+      <Section labelledBy="about-cities-heading">
+        <Container size="wide">
+          <div className="grid gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-24">
+            <Heading
+              id="about-cities-heading"
+              eyebrow="03 — Where we work"
+              title="Based in Mumbai,"
+              highlight="working across India"
+              lede="Our studio and workshops are in Mumbai. For projects elsewhere we travel for the key stages and keep a supervisor on site."
+              className="lg:sticky lg:top-28 lg:self-start"
+            />
+            <TypeIndex items={[...STUDIO.servedCities]} />
+          </div>
+        </Container>
+      </Section>
+
+      <Section surface="muted" labelledBy="about-more-heading">
+        <Container size="wide">
+          <Heading id="about-more-heading" eyebrow="04 — The studio" title="People" highlight="and practice" className="mb-14" />
+          <Tiles columns={3} items={MORE} />
+        </Container>
+      </Section>
+
+      <CtaBand id="about-cta-heading" variant="brand" title="Let us design" highlight="your next space" />
     </>
   );
 }

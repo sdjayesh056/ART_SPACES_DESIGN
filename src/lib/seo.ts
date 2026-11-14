@@ -78,3 +78,57 @@ export function breadcrumbJsonLd(entries: BreadcrumbEntry[]) {
         })),
     };
 }
+
+/* ── Page-level structured data ────────────────────────────────────────────
+   Each of these describes something the page visibly is. All reference the
+   Organization node by @id rather than restating it.
+   ──────────────────────────────────────────────────────────────────────── */
+
+const ORGANIZATION_REF = { "@id": absoluteUrl("/#organization") };
+
+export function serviceJsonLd(service: { name: string; description: string; path: string }) {
+    return {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name: service.name,
+        serviceType: service.name,
+        description: service.description,
+        url: absoluteUrl(service.path),
+        provider: ORGANIZATION_REF,
+        areaServed: STUDIO.servedCities.map((city) => ({ "@type": "City", name: city })),
+    };
+}
+
+export function creativeWorkJsonLd(work: { name: string; description: string; path: string; image: string; genre: string }) {
+    return {
+        "@context": "https://schema.org",
+        "@type": "CreativeWork",
+        name: work.name,
+        description: work.description,
+        url: absoluteUrl(work.path),
+        image: work.image.startsWith("http") ? work.image : absoluteUrl(work.image),
+        genre: work.genre,
+        creator: ORGANIZATION_REF,
+    };
+}
+
+export function articleJsonLd(article: { headline: string; description: string; path: string; datePublished: string; image: string }) {
+    return {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: article.headline,
+        description: article.description,
+        mainEntityOfPage: absoluteUrl(article.path),
+        datePublished: article.datePublished,
+        image: article.image.startsWith("http") ? article.image : absoluteUrl(article.image),
+        author: ORGANIZATION_REF,
+        publisher: ORGANIZATION_REF,
+    };
+}
+
+/** Trims a meta description to a length limit at a word boundary. */
+export function clampDescription(text: string, max = 158): string {
+    if (text.length <= max) return text;
+    const cut = text.slice(0, max - 1);
+    return `${cut.slice(0, cut.lastIndexOf(" ")).replace(/[,;:.\s]+$/, "")}…`;
+}

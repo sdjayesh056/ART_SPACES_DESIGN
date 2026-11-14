@@ -35,6 +35,9 @@ export const LIVE_ROUTES = new Set<string>([
     "/about",
     "/careers",
     "/contact",
+    "/faq",
+    "/journal",
+    "/services",
     "/consultation",
     "/consultation/booking",
     "/consultation/process",
@@ -120,7 +123,9 @@ export const menuData: Record<MenuKey, MenuSection> = {
                     "Experience your future space with immersive 3D walkthroughs before we build.",
                 href: "/consultation/virtual-tours",
                 badge: "Free",
-                image: "https://images.unsplash.com/photo-1628151016006-27a988d447a1?q=80&w=2670&auto=format&fit=crop",
+                // A rendered dining room. The previous photo id (1628151016006-…)
+                // had been removed from Unsplash and returned 404.
+                image: "https://images.unsplash.com/photo-1617806118233-18e1de247200?q=80&w=2670&auto=format&fit=crop",
                 icon: Video,
             },
             {

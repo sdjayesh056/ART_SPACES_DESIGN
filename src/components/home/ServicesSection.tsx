@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { ArrowRight, Zap } from "lucide-react";
 
 import { Container } from "@/components/ui/Container";
@@ -76,7 +77,16 @@ function ServiceCard({ service, accent }: { service: Service; accent: string }) 
                     <service.icon className="h-6 w-6" aria-hidden="true" />
                 </span>
 
-                <h3 className="mb-4 text-2xl font-bold leading-tight text-ink">{service.title}</h3>
+                <h3 className="mb-4 text-2xl font-bold leading-tight text-ink">
+                    {/* Stretched over the card (the article is `relative`), so
+                        the whole tile is the link with no change to how it looks. */}
+                    <Link
+                        href={`/services/${service.slug}`}
+                        className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:rounded-panel focus-visible:after:ring-2 focus-visible:after:ring-brand-900"
+                    >
+                        {service.title}
+                    </Link>
+                </h3>
 
                 {/*
                     Full opacity at rest. This was `opacity-80` lifted only on
