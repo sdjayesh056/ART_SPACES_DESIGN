@@ -1,19 +1,20 @@
-import { HeroSection } from "@/components/home/HeroSection";
-import { ServicesSection } from "@/components/home/ServicesSection";
-import { PortfolioSection } from "@/components/home/PortfolioSection";
-import { StatsSection } from "@/components/home/StatsSection";
-import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import { CTASection } from "@/components/home/CTASection";
+import { HomeHero } from "@/components/home/HomeHero";
+import { ClientVoices, JournalTeaser, SectorPanels, ServicesBand, StudioStatement } from "@/components/home/HomeSections";
+import { EnquirySection, MethodSection } from "@/components/home/HomeSheets";
+import { ProjectReel } from "@/components/home/ProjectReel";
 
 export default function HomePage() {
   return (
     <>
-      <HeroSection />
-      <ServicesSection />
-      <PortfolioSection />
-      <StatsSection />
-      <TestimonialsSection />
-      <CTASection />
+      <HomeHero />
+      <StudioStatement />
+      <ServicesBand />
+      <SectorPanels />
+      <ProjectReel />
+      <MethodSection />
+      <ClientVoices />
+      <JournalTeaser />
+      <EnquirySection />
     </>
   );
 }
