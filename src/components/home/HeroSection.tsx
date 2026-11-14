@@ -28,15 +28,21 @@ export function HeroSection() {
             <Container className="relative z-10 grid grid-cols-1 items-center gap-16 pb-20 pt-32 lg:grid-cols-2">
                 {/* ================= LEFT ================= */}
                 <div>
-                    <Eyebrow icon={Sparkles} className="mb-8">
+                    <Eyebrow icon={Sparkles} variant="badge" className="mb-8">
                         {STUDIO.tagline}
                     </Eyebrow>
 
                     <h1
                         id="hero-heading"
-                        className="text-display font-extrabold text-balance text-ink"
+                        className="text-display lg:text-hero font-extrabold text-balance text-ink"
                     >
                         Design Spaces That{" "}
+                        {/*
+                            Pins the reference break from lg up; text-balance
+                            would otherwise pull "Inspire" onto line one.
+                            Below lg the column is full width and wraps freely.
+                        */}
+                        <br className="hidden lg:inline" />
                         <span className="brand-gradient-text">Inspire Modern Living</span>
                     </h1>
 
@@ -51,8 +57,22 @@ export function HeroSection() {
                             <motion.button>, which is invalid HTML and gave
                             keyboard users two tab stops for one action.
                         */}
-                        <CtaButton href="#lead-form">Get Free Consultation</CtaButton>
-                        <CtaButton href="#portfolio" variant="secondary" icon={Play}>
+                        {/*
+                            The gradient variant exists for this one button.
+                            Its endpoints were sampled out of the reference
+                            screenshot and then darkened one step each so the
+                            label clears AA along its whole width — see the
+                            note on VARIANTS.gradient in CtaButton.
+                        */}
+                        <CtaButton href="#lead-form" variant="gradient">
+                            Get Free Consultation
+                        </CtaButton>
+                        <CtaButton
+                            href="#portfolio"
+                            variant="secondary"
+                            icon={Play}
+                            iconPosition="left"
+                        >
                             View Portfolio
                         </CtaButton>
                     </div>

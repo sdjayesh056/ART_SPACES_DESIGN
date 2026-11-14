@@ -101,6 +101,18 @@
     --text-display--line-height: 1.05;
     --text-display--letter-spacing: -0.03em;
 
+    /*
+        Home hero only, applied from lg up (below lg the hero keeps
+        text-display). Sized so "Inspire Modern Living" (≈10.2em wide in the
+        display face) fits on one line of the hero's half-width column from lg
+        up, giving the two-line break of the reference design. Measured column
+        widths: 443px at 1024, 576px at 1280+. text-display is left untouched
+        for PageHero and the 404.
+    */
+    --text-hero: clamp(2.25rem, 0.25rem + 3.75vw, 3.375rem);
+    --text-hero--line-height: 1.05;
+    --text-hero--letter-spacing: -0.03em;
+
     /* ── Radius: three steps, replacing the twelve spellings in use ─────── */
     --radius-tile: 0.75rem;
     --radius-card: 1.5rem;
