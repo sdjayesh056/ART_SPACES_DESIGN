@@ -8,6 +8,7 @@ import { CtaBand } from "@/components/sections/CtaBand";
 import { FaqSection } from "@/components/sections/FaqSection";
 import { IllustrationFrame } from "@/components/sections/FeatureSplit";
 import { DarkBand, GlassCards, Heading } from "@/components/sections/kit";
+import { RoomDesigner } from "@/components/sections/RoomDesigner";
 import { Container } from "@/components/ui/Container";
 import { CtaButton } from "@/components/ui/CtaButton";
 import { PageHero } from "@/components/ui/PageHero";
@@ -43,16 +44,30 @@ export default function VirtualToursPage() {
         <CtaButton href="/consultation/booking">Book a free consultation</CtaButton>
       </PageHero>
 
+      <Section surface="muted" labelledBy="tours-studio-heading">
+        <Container size="wide">
+          <Heading
+            id="tours-studio-heading"
+            eyebrow="01 — The design studio"
+            title="Design a room"
+            highlight="in five moves"
+            lede="Plan it, style it, light it, plant it, then walk around it. Each move is one of our services, and the room redraws as you choose."
+            className="mb-12"
+          />
+          <RoomDesigner />
+        </Container>
+      </Section>
+
       <Section labelledBy="tours-receive-heading">
         <Container size="wide">
-          <Heading id="tours-receive-heading" eyebrow="01 — What you receive" title="More than" highlight="a pretty picture" className="mb-14" />
+          <Heading id="tours-receive-heading" eyebrow="02 — What you receive" title="More than" highlight="a pretty picture" className="mb-14" />
           <BentoGrid items={TOUR_RECEIVES} />
         </Container>
       </Section>
 
       <DarkBand labelledBy="tours-steps-heading">
         <Container size="wide">
-          <Heading id="tours-steps-heading" tone="inverse" eyebrow="02 — How it runs" title="From model" highlight="to sign-off" className="mb-14" />
+          <Heading id="tours-steps-heading" tone="inverse" eyebrow="03 — How it runs" title="From model" highlight="to sign-off" className="mb-14" />
           <GlassCards items={TOUR_STEPS} />
           <dl className="mt-16 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-white/15 pt-12 lg:grid-cols-4">
             {TOUR_FACTS.map((fact) => (
@@ -74,7 +89,7 @@ export default function VirtualToursPage() {
               </IllustrationFrame>
             </Reveal>
             <div>
-              <Heading id="tours-why-heading" eyebrow="03 — Why it matters" title="Fewer changes on site," highlight="and no surprises" />
+              <Heading id="tours-why-heading" eyebrow="04 — Why it matters" title="Fewer changes on site," highlight="and no surprises" />
               <Reveal delay={0.1}>
                 <div className="mt-8 space-y-5 text-lg leading-relaxed text-pretty text-ink-muted">
                   <p>

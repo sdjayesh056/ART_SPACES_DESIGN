@@ -6,6 +6,7 @@ import { ArrowRight, CheckCircle2, ChevronDown, Loader2, Mail, MessageSquare, Sm
 
 import { submitLead } from "@/actions/lead";
 import { SERVICE_OPTIONS } from "@/data/lead-services";
+import { useRoomBrief } from "@/lib/room-brief";
 import { HONEYPOT_FIELD, initialLeadFormState, type LeadFormState } from "@/types/lead";
 
 const INPUT_CLASS =
@@ -18,6 +19,8 @@ const ICON_CLASS = "absolute left-4 top-1/2 -translate-y-1/2 text-ink-subtle poi
 export function LeadCaptureForm() {
     const [state, formAction, isPending] = useActionState(submitLead, initialLeadFormState);
     const fieldId = useId();
+    /* The room a visitor designed in the studio, if they came from there. */
+    const brief = useRoomBrief();
 
     if (state.status === "success") {
         return <SuccessPanel message={state.message} />;
@@ -167,10 +170,12 @@ export function LeadCaptureForm() {
                 <textarea
                     id={id("message")}
                     name="message"
-                    rows={4}
+                    /* Remounts once the saved brief is known, so it becomes the starting text. */
+                    key={brief ? "brief" : "blank"}
+                    rows={brief ? 7 : 4}
                     maxLength={2000}
                     placeholder="Space type, approximate size, timeline, budget range…"
-                    defaultValue={state.values?.message ?? ""}
+                    defaultValue={state.values?.message ?? brief}
                     aria-invalid={state.fieldErrors?.message ? true : undefined}
                     aria-describedby={state.fieldErrors?.message ? errorId("message") : undefined}
                     className={`${INPUT_CLASS} resize-y min-h-[112px]`}
