@@ -3,20 +3,65 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { AnimatePresence, m, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useReducedMotion, type Variants } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 
-import { MegaMenu } from "./MegaMenu";
+import { MegaMenu, preloadMenuStage } from "./MegaMenu";
 import { MobileNav } from "./MobileNav";
 import { menuData, NAV_ITEMS, PRIMARY_CTA } from "@/data/navigation";
 import type { MenuKey } from "@/types/navigation";
 
 const PANEL_ID = "primary-mega-menu";
 
+/*
+    The panel opens from closed with a fade, a short drop and a slight scale.
+    Moving between two triggers is different: the incoming panel fades in, in
+    place, over the outgoing one, which stays solid underneath until it is
+    covered and is then removed. Two panels fading against each other would
+    let the page show through at the midpoint.
+
+    `exit` is a function because AnimatePresence hands an exiting panel its
+    `custom` value at the moment it leaves — true when another panel replaces
+    it, false when the menu is simply closing.
+*/
+const PANEL_VARIANTS: Variants = {
+    closed: { opacity: 0, y: -12, scale: 0.96 },
+    swapIn: { opacity: 0, y: 0, scale: 1 },
+    open: { opacity: 1, y: 0, scale: 1 },
+    exit: (replaced: boolean) =>
+        replaced
+            ? { opacity: 0, transition: { delay: 0.35, duration: 0.01 } }
+            : { opacity: 0, y: -8, scale: 0.98 },
+};
+
 export function Navbar() {
     const [activeMenu, setActiveMenu] = useState<MenuKey | null>(null);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+
+    /*
+        Whether the current panel replaced another one, derived during render
+        from the previous value so the incoming panel mounts with the right
+        entrance on its very first frame.
+    */
+    const [lastMenu, setLastMenu] = useState<MenuKey | null>(null);
+    const [swapped, setSwapped] = useState(false);
+    if (lastMenu !== activeMenu) {
+        setLastMenu(activeMenu);
+        setSwapped(lastMenu !== null && activeMenu !== null);
+    }
+
+    /*
+        Fetch each menu's opening image when a mouse first reaches the bar, so
+        it is in the cache before a panel opens. Once per page, mouse only —
+        touch and keyboard users never pay for images they may not see.
+    */
+    const warmed = useRef(false);
+    const warmMenus = useCallback((event: React.PointerEvent) => {
+        if (warmed.current || event.pointerType !== "mouse") return;
+        warmed.current = true;
+        preloadMenuStage(Object.values(menuData).map((section) => section.items[0]));
+    }, []);
 
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -142,6 +187,7 @@ export function Navbar() {
                 <div
                     ref={containerRef}
                     onBlur={handleFocusOut}
+                    onPointerEnter={warmMenus}
                     className={`
                 pointer-events-auto relative flex items-center justify-between
                 w-full max-w-7xl
@@ -277,19 +323,27 @@ export function Navbar() {
                     </div>
 
                     {/* ========== MEGA MENU ========== */}
-                    <div className="absolute top-full inset-x-0 pt-4 flex justify-center pointer-events-none">
-                        <AnimatePresence>
+                    {/*
+                        A grid with every panel in the same cell, not a flex
+                        row. While one panel exits and the next enters, both
+                        exist; as flex siblings they sat side by side and
+                        squeezed each other to about 640px, so the menu
+                        visibly narrowed and snapped back on every switch.
+                    */}
+                    <div className="absolute top-full inset-x-0 pt-4 grid justify-items-center pointer-events-none">
+                        <AnimatePresence custom={activeMenu !== null}>
                             {activeSection && (
                                 <m.div
                                     key={activeMenu}
                                     id={PANEL_ID}
-                                    initial={{ opacity: 0, y: -12, scale: 0.96 }}
-                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                    exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                                    variants={PANEL_VARIANTS}
+                                    initial={swapped ? "swapIn" : "closed"}
+                                    animate="open"
+                                    exit="exit"
                                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                                     onMouseEnter={cancelClose}
                                     onMouseLeave={closeMenu}
-                                    className="pointer-events-auto w-[92vw] max-w-5xl"
+                                    className="pointer-events-auto col-start-1 row-start-1 w-[92vw] max-w-5xl"
                                 >
                                     <MegaMenu title={activeSection.title} items={activeSection.items} />
                                 </m.div>
