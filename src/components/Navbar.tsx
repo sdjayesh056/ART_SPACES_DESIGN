@@ -3,15 +3,31 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, m, useReducedMotion, type Variants } from "framer-motion";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
 
-import { MegaMenu, preloadMenuStage } from "./MegaMenu";
+import { MegaMenu, preloadMenuImages } from "./MegaMenu";
 import { MobileNav } from "./MobileNav";
 import { menuData, NAV_ITEMS, PRIMARY_CTA } from "@/data/navigation";
 import type { MenuKey } from "@/types/navigation";
 
 const PANEL_ID = "primary-mega-menu";
+
+/*
+    Hover intent, in milliseconds. A panel opens only once the pointer has
+    rested on its trigger, so sweeping the mouse across the bar opens nothing.
+    Switching from one open panel to another waits a little longer: the
+    straight line from a trigger to the far side of its panel crosses the
+    neighbouring triggers, and without the wait the menu changes under the
+    pointer on the way down. Leaving is the most forgiving of the three.
+*/
+const OPEN_DELAY = 90;
+const SWITCH_DELAY = 140;
+const CLOSE_DELAY = 220;
+
+/* What Tab stops at inside a panel. The arcade's links repeat the schedule and are out of the tab order. */
+const PANEL_STOPS = 'a[href]:not([tabindex="-1"]), button:not([disabled]):not([tabindex="-1"])';
 
 /*
     The panel opens from closed with a fade, a short drop and a slight scale.
@@ -38,6 +54,7 @@ export function Navbar() {
     const [activeMenu, setActiveMenu] = useState<MenuKey | null>(null);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const pathname = usePathname();
 
     /*
         Whether the current panel replaced another one, derived during render
@@ -53,19 +70,31 @@ export function Navbar() {
 
     /*
         Fetch each menu's opening image when a mouse first reaches the bar, so
-        it is in the cache before a panel opens. Once per page, mouse only —
-        touch and keyboard users never pay for images they may not see.
+        the room that is lit first is in the cache before its panel opens.
+        Once per page, mouse only — touch and keyboard users never pay for
+        images they may not see.
+
+        Only the first of each menu: all twelve at once asked the image
+        optimiser for twelve large originals in the same instant, and some of
+        those requests timed out. The other three rooms of a panel are dim
+        when it opens and fade in as they arrive.
     */
     const warmed = useRef(false);
     const warmMenus = useCallback((event: React.PointerEvent) => {
         if (warmed.current || event.pointerType !== "mouse") return;
         warmed.current = true;
-        preloadMenuStage(Object.values(menuData).map((section) => section.items[0]));
+        preloadMenuImages(Object.values(menuData).map((section) => section.items[0]));
     }, []);
 
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const intentTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    /* What last pressed a trigger: "mouse", "touch", "pen" or "keyboard". Decides what a click means. */
+    const pointerKind = useRef("mouse");
     const containerRef = useRef<HTMLDivElement | null>(null);
+    const navGroupRef = useRef<HTMLDivElement | null>(null);
     const triggerRefs = useRef<Partial<Record<MenuKey, HTMLButtonElement | null>>>({});
+    /* One slot per menu: while panels swap, two are mounted, and a single ref would be nulled by the one leaving. */
+    const panelRefs = useRef<Partial<Record<MenuKey, HTMLDivElement | null>>>({});
     const reduceMotion = useReducedMotion();
 
     /* ------------------------------------------------------------------
@@ -92,10 +121,11 @@ export function Navbar() {
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
-    /* Clear any pending close on unmount so we never setState on a dead component. */
+    /* Clear any pending timers on unmount so we never setState on a dead component. */
     useEffect(() => {
         return () => {
             if (closeTimer.current) clearTimeout(closeTimer.current);
+            if (intentTimer.current) clearTimeout(intentTimer.current);
         };
     }, []);
 
@@ -106,31 +136,119 @@ export function Navbar() {
         }
     }, []);
 
-    const openMenu = useCallback(
-        (key: MenuKey) => {
-            cancelClose();
-            setActiveMenu(key);
-        },
-        [cancelClose],
-    );
+    const cancelIntent = useCallback(() => {
+        if (intentTimer.current) {
+            clearTimeout(intentTimer.current);
+            intentTimer.current = null;
+        }
+    }, []);
 
     const closeMenu = useCallback(() => {
         cancelClose();
-        closeTimer.current = setTimeout(() => setActiveMenu(null), 180);
-    }, [cancelClose]);
+        cancelIntent();
+        closeTimer.current = setTimeout(() => setActiveMenu(null), CLOSE_DELAY);
+    }, [cancelClose, cancelIntent]);
 
     const closeMenuNow = useCallback(() => {
         cancelClose();
+        cancelIntent();
         setActiveMenu(null);
-    }, [cancelClose]);
+    }, [cancelClose, cancelIntent]);
 
-    const toggleMenu = useCallback(
-        (key: MenuKey) => {
+    /* ---------------- Pointer: hover opens, with intent ---------------- */
+
+    /*
+        Every hover handler here is a POINTER event, never a mouse event. The
+        browser sends all of a move's pointer events before any of its mouse
+        events, so a mouseleave on the panel used to arrive AFTER the
+        pointerenter on the trigger the pointer had just moved to — and closed
+        the menu the visitor was pointing at. Within one family the order is
+        always leave, then enter.
+
+        A finger "leaves" the moment it lifts, so only a mouse leaving counts.
+    */
+    const leaveByMouse = (event: React.PointerEvent) => {
+        if (event.pointerType === "mouse") closeMenu();
+    };
+
+    const hoverTrigger = (key: MenuKey, event: React.PointerEvent) => {
+        // A tap also reports a pointer entering. Touch and pen open with the click instead.
+        if (event.pointerType !== "mouse") return;
+        cancelClose();
+        cancelIntent();
+        if (activeMenu === key) return;
+        intentTimer.current = setTimeout(() => setActiveMenu(key), activeMenu === null ? OPEN_DELAY : SWITCH_DELAY);
+    };
+
+    /* Resting on About or Contact closes the panel; brushing past them on the way down does not. */
+    const hoverFlatLink = (event: React.PointerEvent) => {
+        if (event.pointerType !== "mouse" || activeMenu === null) return;
+        cancelIntent();
+        intentTimer.current = setTimeout(() => setActiveMenu(null), SWITCH_DELAY);
+    };
+
+    const clickTrigger = (key: MenuKey) => {
+        cancelClose();
+        cancelIntent();
+        /*
+            A mouse has already opened the panel by hovering, so a click must
+            not snap it shut again — it only makes sure the panel is open.
+            Touch, pen and keyboard have no hover: for them the click toggles.
+        */
+        if (pointerKind.current === "mouse") setActiveMenu(key);
+        else setActiveMenu((current) => (current === key ? null : key));
+    };
+
+    /* ---------------- Keyboard ---------------- */
+
+    const focusInPanel = useCallback((key: MenuKey, edge: "first" | "last") => {
+        const stops = panelRefs.current[key]?.querySelectorAll<HTMLElement>(PANEL_STOPS);
+        if (!stops || stops.length === 0) return false;
+        stops[edge === "first" ? 0 : stops.length - 1].focus();
+        return true;
+    }, []);
+
+    /*
+        Enter and Space toggle the panel (the button's own click). Focus alone
+        does not open it: tabbing along the bar should not throw three large
+        panels at the visitor. Once a panel is open, Tab goes into it and Down
+        Arrow opens it and goes in at once — the panel sits at the end of the
+        bar in the DOM, so this is what makes it follow its trigger.
+    */
+    const keyTrigger = (key: MenuKey, event: React.KeyboardEvent<HTMLButtonElement>) => {
+        pointerKind.current = "keyboard";
+
+        if (event.key === "ArrowDown") {
+            event.preventDefault();
             cancelClose();
-            setActiveMenu((current) => (current === key ? null : key));
-        },
-        [cancelClose],
-    );
+            setActiveMenu(key);
+            // Two frames: one for React to mount the panel, one for it to be focusable.
+            requestAnimationFrame(() => requestAnimationFrame(() => focusInPanel(key, "first")));
+        } else if (event.key === "Tab" && !event.shiftKey && activeMenu === key && focusInPanel(key, "first")) {
+            event.preventDefault();
+        }
+    };
+
+    /* Leaving the panel by keyboard: back to its trigger, or on along the bar from it. */
+    const keyPanel = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        if (event.key !== "Tab" || !activeMenu) return;
+
+        const stops = Array.from(panelRefs.current[activeMenu]?.querySelectorAll<HTMLElement>(PANEL_STOPS) ?? []);
+        const trigger = triggerRefs.current[activeMenu];
+        if (stops.length === 0 || !trigger) return;
+
+        if (event.shiftKey && document.activeElement === stops[0]) {
+            event.preventDefault();
+            trigger.focus();
+        } else if (!event.shiftKey && document.activeElement === stops[stops.length - 1]) {
+            const bar = Array.from(navGroupRef.current?.querySelectorAll<HTMLElement>("a[href], button") ?? []);
+            const next = bar[bar.indexOf(trigger) + 1];
+            if (!next) return;
+            event.preventDefault();
+            closeMenuNow();
+            next.focus();
+        }
+    };
 
     /* Escape closes and returns focus to the trigger that opened the panel. */
     useEffect(() => {
@@ -163,6 +281,14 @@ export function Navbar() {
         return () => document.removeEventListener("pointerdown", onPointerDown);
     }, [activeMenu, closeMenuNow]);
 
+    /* Focus settling anywhere on the bar other than the open panel or its own trigger closes the panel. */
+    const handleFocusIn = (event: React.FocusEvent<HTMLDivElement>) => {
+        if (!activeMenu) return;
+        const target = event.target as Node;
+        if (panelRefs.current[activeMenu]?.contains(target) || triggerRefs.current[activeMenu] === target) return;
+        closeMenuNow();
+    };
+
     /* Tabbing out of the navbar entirely closes the panel. */
     const handleFocusOut = useCallback(
         (event: React.FocusEvent<HTMLDivElement>) => {
@@ -177,6 +303,27 @@ export function Navbar() {
 
     return (
         <>
+            {/*
+                A veil over the page while a panel is open, so the panel is the
+                one lit thing on screen. Purely visual: it takes no pointer
+                events, and it is a plain colour rather than a backdrop blur,
+                which would re-blur the whole viewport on every frame the page
+                beneath it moves.
+            */}
+            <AnimatePresence>
+                {activeMenu && (
+                    <m.div
+                        key="nav-veil"
+                        aria-hidden="true"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="pointer-events-none fixed inset-0 z-40 bg-brand-950/40"
+                    />
+                )}
+            </AnimatePresence>
+
             <m.nav
                 initial={reduceMotion ? false : { y: -40, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -186,6 +333,7 @@ export function Navbar() {
             >
                 <div
                     ref={containerRef}
+                    onFocus={handleFocusIn}
                     onBlur={handleFocusOut}
                     onPointerEnter={warmMenus}
                     className={`
@@ -224,13 +372,14 @@ export function Navbar() {
                             alt=""
                             width={250}
                             height={60}
-                            className="hidden md:block opacity-90 md:w-[250px]"
+                            className="hidden md:block opacity-90 md:w-[250px] lg:h-auto lg:w-[200px] xl:w-[250px]"
                         />
                     </Link>
 
                     {/* ========== CENTER : Desktop Nav ========== */}
                     <div
-                        onMouseLeave={closeMenu}
+                        ref={navGroupRef}
+                        onPointerLeave={leaveByMouse}
                         className="relative hidden lg:flex items-center gap-1 rounded-full bg-black/5 p-1 ring-1 ring-white/10"
                     >
                         {NAV_ITEMS.map((item) => {
@@ -239,9 +388,10 @@ export function Navbar() {
                                     <Link
                                         key={item.href}
                                         href={item.href}
-                                        onMouseEnter={closeMenuNow}
-                                        onFocus={closeMenuNow}
-                                        className="relative z-10 px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-brand-900 hover:bg-brand-900 hover:text-accent-on-brand transition-colors"
+                                        onPointerEnter={hoverFlatLink}
+                                        onPointerLeave={cancelIntent}
+                                        aria-current={pathname === item.href ? "page" : undefined}
+                                        className="relative z-10 px-4 xl:px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-brand-900 hover:bg-brand-900 hover:text-accent-on-brand transition-colors"
                                     >
                                         {item.label}
                                     </Link>
@@ -250,6 +400,7 @@ export function Navbar() {
 
                             const menuKey = item.menuKey;
                             const isActive = activeMenu === menuKey;
+                            const inSection = pathname === item.href || pathname.startsWith(`${item.href}/`);
 
                             return (
                                 <button
@@ -258,11 +409,14 @@ export function Navbar() {
                                     ref={(node) => {
                                         triggerRefs.current[menuKey] = node;
                                     }}
-                                    onMouseEnter={() => openMenu(menuKey)}
-                                    onFocus={() => openMenu(menuKey)}
-                                    onClick={() => toggleMenu(menuKey)}
+                                    onPointerEnter={(event) => hoverTrigger(menuKey, event)}
+                                    onPointerLeave={cancelIntent}
+                                    onPointerDown={(event) => {
+                                        pointerKind.current = event.pointerType;
+                                    }}
+                                    onKeyDown={(event) => keyTrigger(menuKey, event)}
+                                    onClick={() => clickTrigger(menuKey)}
                                     aria-expanded={isActive}
-                                    aria-haspopup="true"
                                     aria-controls={PANEL_ID}
                                     /*
                                         Plain CSS rather than a shared-layout
@@ -274,7 +428,7 @@ export function Navbar() {
                                         for a slide most visitors never see.
                                     */
                                     className={`
-                        relative z-10 px-5 py-2 rounded-full cursor-pointer
+                        relative z-10 inline-flex items-center gap-1.5 pl-4 pr-3 xl:pl-5 xl:pr-4 py-2 rounded-full cursor-pointer
                         text-xs font-semibold uppercase tracking-wider
                         transition-colors duration-300
                         ${
@@ -285,6 +439,18 @@ export function Navbar() {
                     `}
                                 >
                                     {item.label}
+                                    {/* The caret is what tells a panel trigger from a plain link. */}
+                                    <ChevronDown
+                                        aria-hidden="true"
+                                        className={`h-3 w-3 transition-transform duration-300 ${isActive ? "rotate-180" : ""}`}
+                                    />
+                                    {/* A mark under the section the visitor is already in. */}
+                                    {inSection && !isActive && (
+                                        <span
+                                            aria-hidden="true"
+                                            className="absolute bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-accent-600"
+                                        />
+                                    )}
                                 </button>
                             );
                         })}
@@ -330,22 +496,32 @@ export function Navbar() {
                         squeezed each other to about 640px, so the menu
                         visibly narrowed and snapped back on every switch.
                     */}
-                    <div className="absolute top-full inset-x-0 pt-4 grid justify-items-center pointer-events-none">
+                    <div className="absolute top-full inset-x-0 grid justify-items-center pointer-events-none">
                         <AnimatePresence custom={activeMenu !== null}>
-                            {activeSection && (
+                            {activeSection && activeMenu && (
                                 <m.div
                                     key={activeMenu}
                                     id={PANEL_ID}
+                                    ref={(node) => {
+                                        panelRefs.current[activeMenu] = node;
+                                    }}
                                     variants={PANEL_VARIANTS}
                                     initial={swapped ? "swapIn" : "closed"}
                                     animate="open"
                                     exit="exit"
                                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                                    onMouseEnter={cancelClose}
-                                    onMouseLeave={closeMenu}
-                                    className="pointer-events-auto col-start-1 row-start-1 w-[92vw] max-w-5xl"
+                                    onPointerEnter={cancelClose}
+                                    onPointerLeave={leaveByMouse}
+                                    onKeyDown={keyPanel}
+                                    /*
+                                        The gap under the bar is padding INSIDE
+                                        the panel's own box, so the pointer
+                                        never crosses dead space on its way
+                                        down from a trigger.
+                                    */
+                                    className="pointer-events-auto col-start-1 row-start-1 w-[min(92vw,72rem)] pt-4"
                                 >
-                                    <MegaMenu title={activeSection.title} items={activeSection.items} />
+                                    <MegaMenu menuKey={activeMenu} section={activeSection} onNavigate={closeMenuNow} />
                                 </m.div>
                             )}
                         </AnimatePresence>

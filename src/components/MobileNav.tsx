@@ -104,7 +104,7 @@ export function MobileNav({ isOpen, onClose }: MobileNavProps) {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="fixed inset-0 z-[60] bg-surface-inverse/60 backdrop-blur-2xl"
+                        className="fixed inset-0 z-[60] bg-brand-950/60 backdrop-blur-2xl"
                         onClick={onClose}
                     />
                     <MobileNavPanel key="mobile-nav-panel" onClose={onClose} />
@@ -177,10 +177,10 @@ function MobileNavPanel({ onClose }: { onClose: () => void }) {
             animate="open"
             exit="closed"
             variants={menuVariants}
-            className="fixed inset-0 z-[70] bg-surface-inverse text-white overflow-y-auto"
+            className="fixed inset-0 z-[70] bg-brand-950 text-ink-inverse overflow-y-auto"
         >
             {/* Header */}
-            <div className="sticky top-0 z-10 flex items-center justify-between p-4 bg-surface-inverse/95 backdrop-blur-sm border-b border-white/10">
+            <div className="sticky top-0 z-10 flex items-center justify-between p-4 bg-brand-950/95 backdrop-blur-sm border-b border-white/10">
                 <div className="flex items-center">
                     <Image
                         src="/Logos/ART_SPACES_DESIGN_LOGO.png"
@@ -225,10 +225,10 @@ function MobileNavPanel({ onClose }: { onClose: () => void }) {
                                 className="w-full flex items-center justify-between py-4 group"
                             >
                                 <span className="flex items-center gap-4">
-                                    <span className="text-sm font-mono text-brand-400">
+                                    <span className="text-sm font-mono text-accent-on-brand">
                                         0{index + 1}
                                     </span>
-                                    <span className="text-2xl font-bold tracking-tight">
+                                    <span className="text-2xl font-medium tracking-tight">
                                         {section.label}
                                     </span>
                                 </span>
@@ -250,7 +250,7 @@ function MobileNavPanel({ onClose }: { onClose: () => void }) {
                                         variants={subMenuVariants}
                                         className="overflow-hidden"
                                     >
-                                        <div className="pb-4 pl-10 space-y-1">
+                                        <div className="pb-4 pl-1 space-y-1">
                                             {section.items.map((item) => (
                                                 <Link
                                                     key={item.id}
@@ -258,30 +258,39 @@ function MobileNavPanel({ onClose }: { onClose: () => void }) {
                                                     onClick={onClose}
                                                     className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors group"
                                                 >
-                                                    <span className="shrink-0 w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-brand-400">
-                                                        <item.icon className="w-5 h-5" aria-hidden="true" />
+                                                    {/* The room behind the link, in the same arch the desktop menu lights. */}
+                                                    <span className="relative block h-14 w-11 shrink-0 overflow-clip rounded-t-full bg-white/10">
+                                                        <Image src={item.image} alt="" fill sizes="44px" className="object-cover" />
                                                     </span>
                                                     <span className="flex-1 min-w-0">
                                                         <span className="flex items-center gap-2">
-                                                            <span className="font-semibold text-white group-hover:text-brand-400 transition-colors">
+                                                            <span className="font-semibold text-white group-hover:text-accent-on-brand transition-colors">
                                                                 {item.title}
                                                             </span>
                                                             {item.badge && (
-                                                                <span className="px-2 py-0.5 text-[10px] font-bold uppercase rounded-full bg-brand-500 text-brand-950">
+                                                                <span className="px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-[0.18em] rounded-full border border-accent-on-brand/45 text-accent-on-brand">
                                                                     {item.badge}
                                                                 </span>
                                                             )}
                                                         </span>
-                                                        <span className="block text-sm text-white/60 line-clamp-1">
+                                                        <span className="block text-sm leading-snug text-white/65">
                                                             {item.description}
                                                         </span>
                                                     </span>
                                                     <ArrowRight
-                                                        className="w-4 h-4 text-white/40 group-hover:text-brand-400 group-hover:translate-x-1 transition-all"
+                                                        className="w-4 h-4 text-white/40 group-hover:text-accent-on-brand group-hover:translate-x-1 transition-all"
                                                         aria-hidden="true"
                                                     />
                                                 </Link>
                                             ))}
+                                            <Link
+                                                href={`/${section.key}`}
+                                                onClick={onClose}
+                                                className="flex min-h-11 items-center gap-2 p-3 text-sm font-semibold text-accent-on-brand"
+                                            >
+                                                {section.label} overview
+                                                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                                            </Link>
                                         </div>
                                     </m.div>
                                 )}
@@ -298,15 +307,15 @@ function MobileNavPanel({ onClose }: { onClose: () => void }) {
                                 className="flex items-center justify-between py-4 group border-b border-white/10"
                             >
                                 <span className="flex items-center gap-4">
-                                    <span className="text-sm font-mono text-accent-400">
+                                    <span className="text-sm font-mono text-accent-on-brand">
                                         0{MENU_SECTIONS.length + index + 1}
                                     </span>
-                                    <span className="text-2xl font-bold tracking-tight group-hover:text-accent-400 transition-colors">
+                                    <span className="text-2xl font-medium tracking-tight group-hover:text-accent-on-brand transition-colors">
                                         {item.label}
                                     </span>
                                 </span>
                                 <ArrowRight
-                                    className="w-6 h-6 text-white/70 group-hover:text-accent-400 group-hover:translate-x-1 transition-all"
+                                    className="w-6 h-6 text-white/70 group-hover:text-accent-on-brand group-hover:translate-x-1 transition-all"
                                     aria-hidden="true"
                                 />
                             </Link>
@@ -320,7 +329,7 @@ function MobileNavPanel({ onClose }: { onClose: () => void }) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}
-                className="sticky bottom-0 bg-surface-inverse/95 backdrop-blur-sm border-t border-white/10 p-4"
+                className="sticky bottom-0 bg-brand-950/95 backdrop-blur-sm border-t border-white/10 p-4"
             >
                 <div className="flex flex-col gap-4">
                     <Link

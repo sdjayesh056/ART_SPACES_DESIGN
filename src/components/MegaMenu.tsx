@@ -1,44 +1,49 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image, { getImageProps } from "next/image";
 import Link from "next/link";
-import { AnimatePresence, m } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { ArrowUpRight } from "lucide-react";
 
-import type { MenuItem } from "@/types/navigation";
+import { MENU_KEYS, type MenuItem, type MenuKey, type MenuSection } from "@/types/navigation";
 
-interface MegaMenuProps {
-    title: string;
-    items: MenuItem[];
-}
-
-/*
-    The stage is two thirds of a panel capped at max-w-5xl (1024px). The
-    rendered images and the preloader share this string so both resolve to the
-    same optimised file, and the preload is a guaranteed cache hit.
-*/
-const STAGE_SIZES = "(min-width: 1024px) 683px, 1px";
+type MegaMenuProps = {
+    menuKey: MenuKey;
+    section: MenuSection;
+    /** Called when a link is followed, so the bar can close the panel behind it. */
+    onNavigate: () => void;
+};
 
 /*
-    Cross-fade between stage images in CSS, as whole class strings. Showing
-    fades and settles from 110%; hiding only fades, then snaps back to 110%
-    once invisible so the next show can settle again. (Tailwind v4 scales with
-    the `scale` property, so that is what transitions.)
+    Any arch can become the wide one, so they all ask for the same file. The
+    preloader shares this string: both resolve to the same optimised image, and
+    the preload is a guaranteed cache hit when the panel opens.
 */
-const STAGE_SHOWN = "opacity-100 scale-100 [transition:opacity_500ms_ease-out,scale_500ms_ease-out]";
-const STAGE_HIDDEN = "opacity-0 scale-110 [transition:opacity_500ms_ease-out,scale_0s_linear_500ms]";
+const ARCH_SIZES = "(min-width: 1280px) 420px, 34vw";
+
+const LABEL = "font-mono uppercase tracking-[0.2em]";
+/*
+    No `outline-none` beside it: in Tailwind v4 that sets the outline STYLE to
+    none, which `outline-2` then inherits, and the focus ring silently vanishes.
+    Links only draw an outline on :focus-visible anyway.
+*/
+const FOCUS = "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent-on-brand";
+/* The arcade re-proportions on one curve: the arch that opens and the one that closes move together. */
+const SWING = "duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none";
+const ROVE: Record<string, number> = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 };
+const two = (value: number) => String(value).padStart(2, "0");
 
 /**
- * Starts fetching the stage image for each item, so it is already in the HTTP
- * cache when a panel opens. Navbar calls this when a mouse first reaches the
- * bar, with the first item of every menu.
+ * Starts fetching the arch image for each item, so it is already in the HTTP
+ * cache when a panel opens. Navbar calls this once, when a mouse first reaches
+ * the bar.
  */
-export function preloadMenuStage(items: MenuItem[]) {
+export function preloadMenuImages(items: MenuItem[]) {
     if (!window.matchMedia("(min-width: 1024px)").matches) return;
 
     for (const item of items) {
-        const { props } = getImageProps({ src: item.image, alt: "", fill: true, sizes: STAGE_SIZES });
+        const { props } = getImageProps({ src: item.image, alt: "", fill: true, sizes: ARCH_SIZES });
         const image = new window.Image();
         image.decoding = "async";
         // `sizes` before `srcset`, so the browser picks the same candidate the panel will.
@@ -48,69 +53,166 @@ export function preloadMenuStage(items: MenuItem[]) {
     }
 }
 
-export function MegaMenu({ title, items }: MegaMenuProps) {
-    /*
-        No reset effect needed: Navbar keys this panel's wrapper on the active
-        menu, so switching sections remounts the subtree and this initialiser
-        runs fresh. Previously the id lingered and no row read as active.
-    */
-    const [hoveredId, setHoveredId] = useState<string>(items[0]?.id ?? "");
+/**
+ * The mega menu, drawn as the elevation of a house at dusk.
+ *
+ * On the left is the schedule: a numbered list of the pages, which is the
+ * real navigation and all a keyboard or a screen reader needs. On the right
+ * is the house: an arcade of four openings, one room behind each. The rooms
+ * are dark until one is chosen. Pointing at a row or an arch switches that
+ * room's lights on — the arch opens wide, the room brightens, and light
+ * falls across the threshold.
+ *
+ * The arcade repeats the schedule for the eye, so it is hidden from assistive
+ * technology and its links are out of the tab order.
+ *
+ * Deliberately not animated in as a whole: Navbar's wrapper already fades and
+ * settles the panel, and a second entrance here would multiply the two.
+ */
+export function MegaMenu({ menuKey, section, onNavigate }: MegaMenuProps) {
+    const { title, items } = section;
+    const pathname = usePathname();
+    /* Navbar keys the panel on the open menu, so all of this starts fresh each time one opens. */
+    const [active, setActive] = useState(0);
+    /* The first room is lit a beat after the panel arrives, so the lights are seen coming on. */
+    const [lit, setLit] = useState(false);
     const [loaded, setLoaded] = useState<Record<string, boolean>>({});
 
-    const activeItem = items.find((item) => item.id === hoveredId) ?? items[0];
+    useEffect(() => {
+        const timer = window.setTimeout(() => setLit(true), 160);
+        return () => window.clearTimeout(timer);
+    }, []);
+
+    /* Arrow keys, Home and End walk the schedule; Tab still moves through it one link at a time. */
+    const rove = (event: React.KeyboardEvent<HTMLAnchorElement>) => {
+        const links = Array.from(event.currentTarget.closest("ul")?.querySelectorAll<HTMLAnchorElement>("a[href]") ?? []);
+        const at = links.indexOf(event.currentTarget);
+        const to = event.key === "Home" ? 0 : event.key === "End" ? links.length - 1 : event.key in ROVE && at >= 0 ? (at + ROVE[event.key] + links.length) % links.length : -1;
+        if (to < 0) return;
+        event.preventDefault();
+        links[to].focus();
+    };
 
     return (
-        /*
-            Deliberately NOT animated. Navbar's wrapper already fades, slides
-            and scales the panel in; a second entrance here multiplied the two
-            opacities, so the panel hung at a faint half-state before snapping
-            to full.
-        */
-        <div className="w-full overflow-hidden shadow-2xl rounded-b-3xl border-t border-white/10 bg-surface-sunken">
-            <div className="max-w-7xl mx-auto flex min-h-[450px]">
-                {/* LEFT COLUMN: Navigation & List */}
-                <div className="w-1/3 py-10 pl-8 pr-12 flex flex-col justify-between border-r border-line-strong relative z-10">
-                    <div>
-                        <p className="text-xs font-bold uppercase tracking-[0.3em] mb-8 text-ink-subtle">
-                            {title}
-                        </p>
+        <div className="overflow-clip rounded-panel border border-white/10 bg-brand-950 text-ink-inverse shadow-2xl">
+            {/* Scrolls inside itself on a short screen, so the last row is always reachable. */}
+            <div className="grid max-h-[calc(100svh-7.5rem)] grid-cols-[minmax(0,24rem)_minmax(0,1fr)] overflow-y-auto xl:grid-cols-[minmax(0,26rem)_minmax(0,1fr)]">
+                {/* ===== The schedule: the navigation itself ===== */}
+                <div className="flex flex-col border-r border-white/10 p-7 xl:p-8">
+                    <p className={`${LABEL} flex items-center text-[11px] text-ink-inverse/65`}>
+                        <span className="text-accent-on-brand">
+                            {two(MENU_KEYS.indexOf(menuKey) + 1)} / {two(MENU_KEYS.length)}
+                        </span>
+                        <span aria-hidden="true" className="mx-3 h-px w-6 bg-current" />
+                        {title}
+                    </p>
 
-                        <ul className="space-y-2">
-                            {items.map((item) => {
-                                const isActive = hoveredId === item.id;
+                    <ul className="mt-5 border-b border-white/10">
+                        {items.map((item, index) => {
+                            const on = index === active;
+                            const here = pathname === item.href;
+                            return (
+                                <li key={item.id} className="border-t border-white/10">
+                                    <Link
+                                        href={item.href}
+                                        onClick={onNavigate}
+                                        onMouseEnter={() => setActive(index)}
+                                        // onFocus so tabbing through the schedule lights each room exactly as hovering does.
+                                        onFocus={() => setActive(index)}
+                                        onKeyDown={rove}
+                                        aria-current={here ? "page" : undefined}
+                                        className={`grid grid-cols-[1.75rem_minmax(0,1fr)_1rem] items-start gap-x-3 py-3 ${FOCUS}`}
+                                    >
+                                        <span className={`mt-[0.45rem] font-mono text-[11px] transition-colors duration-300 ${on ? "text-accent-on-brand" : "text-ink-inverse/60"}`}>{two(index + 1)}</span>
+                                        <span className="min-w-0">
+                                            <span className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
+                                                <span className={`text-xl font-medium tracking-tight transition-colors duration-300 ${on ? "text-accent-on-brand" : "text-ink-inverse"}`}>{item.title}</span>
+                                                {item.badge && (
+                                                    <span className={`${LABEL} rounded-full border border-accent-on-brand/45 px-2 py-0.5 text-[9px] font-semibold text-accent-on-brand`}>{item.badge}</span>
+                                                )}
+                                                {here && <span className={`${LABEL} text-[9px] text-ink-inverse/65`}>You are here</span>}
+                                            </span>
+                                            <span
+                                                className={`mt-1 line-clamp-2 text-[13px] leading-snug transition-colors duration-300 [@media(max-height:700px)]:line-clamp-1 ${
+                                                    on ? "text-ink-inverse/85" : "text-ink-inverse/60"
+                                                }`}
+                                            >
+                                                {item.description}
+                                            </span>
+                                        </span>
+                                        <ArrowUpRight
+                                            aria-hidden="true"
+                                            className={`mt-[0.4rem] h-4 w-4 text-accent-on-brand transition-[opacity,translate] duration-300 ${on ? "opacity-100" : "-translate-x-1 translate-y-1 opacity-0"}`}
+                                        />
+                                    </Link>
+                                </li>
+                            );
+                        })}
+                    </ul>
 
+                    <Link
+                        href={`/${menuKey}`}
+                        onClick={onNavigate}
+                        aria-current={pathname === `/${menuKey}` ? "page" : undefined}
+                        className={`mt-auto inline-flex min-h-11 items-center gap-2 self-start pt-3 text-sm font-semibold text-ink-inverse/85 transition-colors hover:text-accent-on-brand ${FOCUS}`}
+                    >
+                        {title} overview
+                        <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                    </Link>
+                </div>
+
+                {/* ===== The house: an arcade of four rooms, lit one at a time ===== */}
+                <div aria-hidden="true" className="flex flex-col p-7 xl:p-8">
+                    <div className="relative flex min-h-[19rem] flex-1">
+                        <ul className="flex min-w-0 flex-1 gap-3">
+                            {items.map((item, index) => {
+                                const on = index === active;
+                                const glow = on && lit;
                                 return (
-                                    <li key={item.id} onMouseEnter={() => setHoveredId(item.id)}>
-                                        <Link
-                                            href={item.href}
-                                            // onFocus so tabbing through the panel updates the
-                                            // visual stage exactly as hovering does.
-                                            onFocus={() => setHoveredId(item.id)}
-                                            className="group flex items-center justify-between py-3"
-                                        >
-                                            <div className="flex items-baseline gap-3">
+                                    <li key={item.id} className={`flex min-w-0 basis-0 flex-col transition-[flex-grow] ${SWING} ${on ? "[flex-grow:3.6]" : "[flex-grow:1]"}`}>
+                                        <Link href={item.href} tabIndex={-1} onClick={onNavigate} onMouseEnter={() => setActive(index)} className="group flex min-h-0 flex-1 flex-col">
+                                            {/* The grid bubble: the bay's number, on its centre line. */}
+                                            <span className="flex flex-col items-center">
                                                 <span
-                                                    className={`text-xl font-medium transition-all duration-300 ${
-                                                        isActive
-                                                            ? "text-accent-on-brand bg-brand-900 translate-x-2 py-2 px-6 rounded-2xl"
-                                                            : "text-brand-900"
+                                                    className={`flex h-7 w-7 items-center justify-center rounded-full border font-mono text-[10px] transition-colors duration-500 ${
+                                                        glow ? "border-accent-on-brand bg-accent-on-brand font-semibold text-brand-950" : "border-white/30 text-ink-inverse/70"
                                                     }`}
                                                 >
-                                                    {item.title}
+                                                    {two(index + 1)}
                                                 </span>
-                                                {item.badge && (
-                                                    <span className="px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-widest border border-line-strong rounded-full text-ink-muted">
-                                                        {item.badge}
-                                                    </span>
-                                                )}
-                                            </div>
+                                                <span className="h-3.5 border-l border-dashed border-white/30" />
+                                            </span>
 
-                                            <ArrowRight
-                                                aria-hidden="true"
-                                                className={`w-4 h-4 transition-all duration-300 ${
-                                                    isActive
-                                                        ? "opacity-100 translate-x-0"
-                                                        : "opacity-0 -translate-x-4"
+                                            <span className="relative block min-h-0 flex-1">
+                                                {/* Light leaking round the opening. */}
+                                                <span className={`absolute -inset-2 rounded-t-full bg-accent-400/35 blur-2xl transition-opacity duration-700 motion-reduce:transition-none ${glow ? "opacity-100" : "opacity-0"}`} />
+                                                <span className="absolute inset-0 overflow-clip rounded-t-full bg-brand-900 ring-1 ring-white/15">
+                                                    <Image
+                                                        src={item.image}
+                                                        alt=""
+                                                        fill
+                                                        sizes={ARCH_SIZES}
+                                                        onLoad={() => setLoaded((current) => (current[item.id] ? current : { ...current, [item.id]: true }))}
+                                                        className={`object-cover transition-[opacity,scale] duration-[900ms] ease-out motion-reduce:transition-none ${loaded[item.id] ? "opacity-100" : "opacity-0"} ${
+                                                            glow ? "scale-100" : "scale-110"
+                                                        }`}
+                                                    />
+                                                    {/* Lights off: the room as it is before anyone walks in. */}
+                                                    <span className={`absolute inset-0 bg-brand-950/75 transition-opacity duration-500 motion-reduce:transition-none ${glow ? "opacity-0" : "opacity-100"}`} />
+                                                    <span className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-brand-950/80 to-transparent" />
+                                                    <span className={`absolute inset-x-4 bottom-3.5 flex items-end justify-between gap-3 transition-opacity duration-500 motion-reduce:transition-none ${glow ? "opacity-100 delay-200" : "opacity-0"}`}>
+                                                        <span className={`${LABEL} whitespace-nowrap text-[10px] text-ink-inverse`}>{item.title}</span>
+                                                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/45 transition-colors group-hover:bg-accent-500 group-hover:text-brand-950">
+                                                            <ArrowUpRight className="h-4 w-4" />
+                                                        </span>
+                                                    </span>
+                                                </span>
+                                            </span>
+
+                                            {/* Light falling across the threshold. */}
+                                            <span
+                                                className={`h-7 bg-gradient-to-b from-accent-300/40 to-transparent transition-opacity duration-700 motion-reduce:transition-none [clip-path:polygon(7%_0,93%_0,100%_100%,0_100%)] ${
+                                                    glow ? "opacity-100" : "opacity-0"
                                                 }`}
                                             />
                                         </Link>
@@ -118,77 +220,17 @@ export function MegaMenu({ title, items }: MegaMenuProps) {
                                 );
                             })}
                         </ul>
+                        {/* The ground line the arcade stands on. */}
+                        <span className="pointer-events-none absolute inset-x-0 bottom-7 h-px bg-white/25" />
                     </div>
 
-                    {/* Footer / Context */}
-                    <div className="mt-8">
-                        <p className="text-sm text-ink-muted max-w-[280px] leading-relaxed">
-                            {activeItem?.description}
-                        </p>
-                        {activeItem && (
-                            <Link
-                                href={activeItem.href}
-                                className="inline-flex items-center gap-2 mt-4 text-xs font-bold uppercase tracking-widest text-ink hover:text-brand-900 transition-colors"
-                            >
-                                View Details
-                            </Link>
-                        )}
-                    </div>
-                </div>
-
-                {/*
-                    RIGHT COLUMN: Visual Stage.
-
-                    This was one CSS background per hovered row, pointing at the
-                    raw 2700px source. A CSS background is decoded synchronously
-                    on the frame that first paints it, and that decode froze the
-                    panel's entrance for 150ms or more — it opened part-way,
-                    stuck, then jumped to full.
-
-                    Now every row's image is mounted with the panel as a resized
-                    next/image: about a third of the pixels, decoded off the
-                    animation's frame, and faded in only once it has loaded.
-                    Hovering a row cross-fades between images already in place
-                    instead of mounting and decoding a new one. The deep-green
-                    ground keeps the caption readable until the image arrives.
-                */}
-                <div className="w-2/3 relative overflow-hidden bg-brand-950" aria-hidden="true">
-                    {items.map((item) => (
-                        <Image
-                            key={item.id}
-                            src={item.image}
-                            alt=""
-                            fill
-                            sizes={STAGE_SIZES}
-                            onLoad={() =>
-                                setLoaded((current) => (current[item.id] ? current : { ...current, [item.id]: true }))
-                            }
-                            className={`object-cover ${
-                                item.id === activeItem?.id && loaded[item.id] ? STAGE_SHOWN : STAGE_HIDDEN
-                            }`}
-                        />
-                    ))}
-
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
-
-                    <AnimatePresence>
-                        {activeItem && (
-                            <m.div
-                                key={activeItem.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, transition: { duration: 0.5, ease: "easeOut" } }}
-                                transition={{ delay: 0.2 }}
-                                className="absolute bottom-8 left-8 right-8 text-white"
-                            >
-                                <h3 className="text-3xl font-light mb-2">{activeItem.title}</h3>
-                                <div className="h-px w-24 bg-white/50 mb-4" />
-                                <p className="text-white/90 text-sm max-w-md">
-                                    {activeItem.description}
-                                </p>
-                            </m.div>
-                        )}
-                    </AnimatePresence>
+                    <p className={`${LABEL} mt-2 flex items-center justify-between gap-4 text-[10px] text-ink-inverse/55`}>
+                        <span>Elevation · {two(items.length)} rooms</span>
+                        <span className="flex items-center gap-2">
+                            <span className="h-1.5 w-1.5 rounded-full bg-accent-on-brand" />
+                            Point at a room to light it
+                        </span>
+                    </p>
                 </div>
             </div>
         </div>
