@@ -39,7 +39,21 @@ export type FooterLink = {
     href: string;
 };
 
-export type FooterColumn = {
+/** Every room the footer's plan draws; `MenuKey` plus the studio's own. */
+export type FooterRoomId = MenuKey | "studio";
+
+/**
+ * A section of the site as the footer shows it: one room on the plan, and one
+ * list in the schedule beside it.
+ */
+export type FooterRoom = {
+    id: FooterRoomId;
     heading: string;
+    /** What the room is on the plan, e.g. "Living room". Decoration, not navigation. */
+    drawnAs: string;
+    /** Where the drawn room leads. */
+    href: string;
+    /** True when `href` is an overview of this list, so the heading links there too. */
+    hasOverview: boolean;
     links: FooterLink[];
 };

@@ -30,7 +30,14 @@ export const STUDIO = {
         locality: "Mumbai",
         region: "Maharashtra",
         country: "India",
+        /** Mumbai's own position, to two places. Not the studio's: that needs the street address. */
+        coordinates: "19.07° N, 72.87° E",
         /** Street, postal code and geo are still missing — required for local SEO. */
+        isPlaceholder: true,
+    },
+
+    hours: {
+        display: "Mon–Sat, 10am–7pm IST",
         isPlaceholder: true,
     },
 
