@@ -13,7 +13,7 @@ import {
     Video,
 } from "lucide-react";
 
-import type { FooterColumn, MenuKey, MenuSection, NavItem } from "@/types/navigation";
+import type { FooterRoom, MenuKey, MenuSection, NavItem } from "@/types/navigation";
 
 /**
  * THE information architecture. Navbar, MegaMenu, MobileNav, Footer and
@@ -209,23 +209,48 @@ export const PRIMARY_CTA = {
     href: "/consultation/booking",
 } as const;
 
-export const FOOTER_COLUMNS: FooterColumn[] = [
-    {
-        heading: "Spaces",
-        links: menuData.spaces.items.map(({ title, href }) => ({ label: title, href })),
-    },
-    {
-        heading: "Expertise",
-        links: menuData.consultation.items.map(({ title, href }) => ({ label: title, href })),
-    },
+/**
+ * The studio's own pages. They are the footer's fourth room, and the footer
+ * is the only place every page links to /services, /journal, /careers and /faq.
+ */
+export const COMPANY_LINKS = [
+    { label: "About", href: "/about" },
+    { label: "Services", href: "/services" },
+    { label: "Journal", href: "/journal" },
+    { label: "Careers", href: "/careers" },
+    { label: "FAQ", href: "/faq" },
+    { label: "Contact", href: "/contact" },
 ];
 
-/** Company links — currently used by sitemap planning, not rendered in the footer grid. */
-export const COMPANY_LINKS = [
-    { label: "About Us", href: "/about" },
-    { label: "Portfolio", href: "/portfolio" },
-    { label: "Contact", href: "/contact" },
-    { label: "Careers", href: "/careers" },
+/** What each menu section is drawn as on the footer's plan. */
+const DRAWN_AS: Record<MenuKey, string> = {
+    spaces: "Living room",
+    consultation: "Meeting room",
+    portfolio: "Gallery",
+};
+
+/**
+ * The footer's plan and schedule. The three menu sections are derived from
+ * `menuData`, so the footer cannot drift from the header; the studio's own
+ * pages make the fourth room.
+ */
+export const FOOTER_ROOMS: FooterRoom[] = [
+    ...(Object.keys(menuData) as MenuKey[]).map((menuKey) => ({
+        id: menuKey,
+        heading: menuData[menuKey].title,
+        drawnAs: DRAWN_AS[menuKey],
+        href: `/${menuKey}`,
+        hasOverview: true,
+        links: menuData[menuKey].items.map(({ title, href }) => ({ label: title, href })),
+    })),
+    {
+        id: "studio",
+        heading: "Studio",
+        drawnAs: "Workroom",
+        href: "/about",
+        hasOverview: false,
+        links: COMPANY_LINKS,
+    },
 ];
 
 export const LEGAL_LINKS = [

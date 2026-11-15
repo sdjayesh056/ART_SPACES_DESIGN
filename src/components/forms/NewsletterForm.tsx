@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 import { subscribeNewsletter } from "@/actions/lead";
 import { HONEYPOT_FIELD, initialNewsletterFormState } from "@/types/lead";
 
+/** The newsletter field. Styled for the footer's dark ground, its only home. */
 export function NewsletterForm() {
     const [state, formAction, isPending] = useActionState(
         subscribeNewsletter,
@@ -16,7 +17,7 @@ export function NewsletterForm() {
     const statusId = `${fieldId}-status`;
 
     return (
-        <div className="w-full md:w-auto">
+        <div className="mt-4 w-full">
             {/*
                 noValidate so the server schema is the single source of truth and
                 errors render in our own styled region, matching LeadCaptureForm —
@@ -25,7 +26,7 @@ export function NewsletterForm() {
             <form
                 action={formAction}
                 noValidate
-                className="flex w-full md:w-auto max-w-md bg-white rounded-full p-1.5 border border-line shadow-sm hover:shadow-md focus-within:border-brand-900 focus-within:ring-1 focus-within:ring-brand-900 transition-all duration-300"
+                className="relative flex w-full rounded-full border border-white/25 bg-white/[0.06] p-1 transition-colors duration-300 focus-within:border-accent-400"
             >
                 <label htmlFor={emailId} className="sr-only">
                     Email address for the design newsletter
@@ -53,25 +54,26 @@ export function NewsletterForm() {
                     placeholder="Email address"
                     aria-invalid={state.status === "error" ? true : undefined}
                     aria-describedby={state.message ? statusId : undefined}
-                    className="flex-1 min-h-11 min-w-0 bg-transparent rounded-full px-4 md:px-5 text-ink placeholder:text-ink-subtle focus:outline-none text-sm font-medium"
+                    className="min-h-11 min-w-0 flex-1 rounded-full bg-transparent pl-4 pr-2 text-[0.9375rem] text-ink-inverse placeholder:text-ink-inverse/60"
                 />
 
                 <button
                     type="submit"
                     disabled={isPending}
-                    className="shrink-0 inline-flex min-h-11 items-center gap-2 px-4 md:px-6 py-3 rounded-full bg-surface-inverse text-white text-xs font-bold uppercase tracking-wider hover:bg-brand-900 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-70"
+                    className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full bg-surface px-5 text-sm font-semibold text-brand-950 transition-colors duration-300 hover:bg-accent-300 disabled:cursor-not-allowed disabled:opacity-70"
                 >
                     {isPending && <Loader2 size={14} className="animate-spin" aria-hidden="true" />}
                     {isPending ? "Sending" : "Subscribe"}
                 </button>
             </form>
 
+            {/* Always in the DOM so a message is announced when it arrives; it takes no room while empty. */}
             <p
                 id={statusId}
                 role="status"
                 aria-live="polite"
-                className={`mt-2 ml-1 text-sm font-medium ${
-                    state.status === "error" ? "text-danger" : "text-brand-900"
+                className={`ml-4 mt-2 text-sm font-medium empty:mt-0 ${
+                    state.status === "error" ? "text-danger-soft" : "text-accent-on-brand"
                 }`}
             >
                 {state.message}

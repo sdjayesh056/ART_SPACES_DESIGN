@@ -47,6 +47,12 @@
     --color-surface-muted: #f8fafc;
     --color-surface-sunken: #f1f5f9;
     --color-surface-inverse: #0f172a;
+    /*
+        The footer's ground: brand-950 taken a third of the way to scrim. The
+        home page ends on a brand-950 band, and the footer has to read as its
+        own floor beneath it rather than as more of the same section.
+    */
+    --color-surface-ground: #082018;
 
     --color-line: #e2e8f0;
     --color-line-strong: #cbd5e1;
@@ -348,6 +354,30 @@ body {
     &::-webkit-scrollbar {
         display: none;
     }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   THE FOOTER'S SITE PLAN
+
+   The footer draws the site as a house in plan, and one room at a time has
+   its light on. PlanLight, the footer's client leaf, names that room in
+   data-lit on .site-plan. Every part of a room — in the drawing and in the
+   schedule beside it — carries data-room, and reads --lit as 1 while its room
+   is lit and 0 while it is not. So a part styles itself once, for example
+   opacity-[var(--lit)], instead of needing a class per room.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* Dark unless named. */
+.site-plan [data-room] {
+    --lit: 0;
+}
+
+.site-plan[data-lit="spaces"] [data-room="spaces"],
+.site-plan[data-lit="consultation"] [data-room="consultation"],
+.site-plan[data-lit="portfolio"] [data-room="portfolio"],
+.site-plan[data-lit="studio"] [data-room="studio"],
+.site-plan[data-lit="door"] [data-room="door"] {
+    --lit: 1;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
