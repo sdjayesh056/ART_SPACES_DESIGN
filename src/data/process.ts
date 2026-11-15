@@ -1,5 +1,7 @@
 import type { Fact, Feature, Phase } from "@/types/content";
 
+import { STUDIO } from "./studio";
+
 /**
  * The studio's project phases, the enquiry sequence and the virtual-tour copy.
  *
@@ -77,9 +79,12 @@ export const NEXT_STEPS: Feature[] = [
 
 export const RESPONSE_FACTS: Fact[] = [
     { label: "First reply", value: "Within 1 working day" },
-    { label: "Studio hours", value: "Mon–Sat, 10am–7pm IST" },
+    { label: "Studio hours", value: STUDIO.hours.display },
     { label: "Consultation", value: "Free, 45 minutes" },
 ];
+
+/** The three promises set beside every route to the consultation: the CTA band and the footer's front door. */
+export const REASSURANCES: string[] = ["Free 45-minute consultation", "Reply within one working day", "No obligation to proceed"];
 
 export const CONSULTATION_COVERS: string[] = [
     "How you use the space today, and what is not working",

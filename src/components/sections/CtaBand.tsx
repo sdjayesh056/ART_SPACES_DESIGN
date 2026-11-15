@@ -7,6 +7,7 @@ import { CtaButton } from "@/components/ui/CtaButton";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
+import { REASSURANCES } from "@/data/process";
 
 type Action = { label: string; href: string };
 
@@ -23,8 +24,6 @@ type CtaBandProps = {
 
 const BOOKING: Action = { label: "Book a free consultation", href: "/consultation/booking" };
 const WORK: Action = { label: "See the work", href: "/portfolio" };
-
-const REASSURANCE = ["Free 45-minute consultation", "Reply within one working day", "No obligation to proceed"];
 
 /**
  * The closing call to action. Twelve pages each carried a hand-copied centred
@@ -65,7 +64,7 @@ export function CtaBand({
                                 </div>
                                 <div>
                                     <ul className="mb-8 list-none space-y-2 p-0 text-sm text-ink-inverse/90">
-                                        {REASSURANCE.map((line) => (
+                                        {REASSURANCES.map((line) => (
                                             <li key={line} className="flex items-center gap-3">
                                                 <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent-on-brand" />
                                                 {line}

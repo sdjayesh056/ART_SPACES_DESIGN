@@ -39,7 +39,7 @@ export function HomeHero() {
                         <p className={`${KICKER} flex flex-wrap items-center gap-x-4 gap-y-2 text-accent-on-brand`}>
                             Interior architecture
                             <span aria-hidden="true" className="h-px w-10 bg-accent-on-brand/60" />
-                            <span className="text-ink-inverse/70">{STUDIO.address.locality} · 19.07° N, 72.87° E</span>
+                            <span className="text-ink-inverse/70">{STUDIO.address.locality} · {STUDIO.address.coordinates}</span>
                         </p>
                         <h1 id="hero-heading" className="mt-6 text-[clamp(2.6rem,min(6.6vw,11svh),6rem)] font-medium leading-[0.98] tracking-[-0.04em] text-balance">
                             Interiors drawn with intent, <span className="text-accent-on-brand">built for living.</span>
