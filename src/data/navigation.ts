@@ -113,7 +113,10 @@ export const menuData: Record<MenuKey, MenuSection> = {
                 description:
                     "Learn how we transform your vision into reality through our proven methodology.",
                 href: "/consultation/process",
-                image: "https://images.unsplash.com/photo-1503455637927-730bce8583c0?q=80&w=2670&auto=format&fit=crop",
+                // A plan being drawn by hand against a scale rule. The previous
+                // photo (1503455637927-…) was of pink clouds, and said nothing
+                // about a design process.
+                image: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?q=80&w=2670&auto=format&fit=crop",
                 icon: ClipboardList,
             },
             {
